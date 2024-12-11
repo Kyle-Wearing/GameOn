@@ -3,16 +3,20 @@ import {
   View,
   StyleSheet,
   Button,
+  Text,
   TextInput,
+  SafeAreaView,
+  SafeAreaViewBase,
+  TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
 
 import { auth } from "../../FirebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 
-function LoginScreen() {
+function CreateAccountScreen() {
   const [email, setEmail] = useState("");
   const [password, setpassowrd] = useState("");
   const refPasswordInput = useRef(null);
@@ -23,9 +27,12 @@ function LoginScreen() {
   };
 
   const signIn = async () => {
+    navigation.navigate("LogIn");
+  };
+
+  const signUp = async () => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user.user.uid);
+      const user = await createUserWithEmailAndPassword(auth, email, password);
       if (user) {
         navigation.navigate("HomePage");
       }
@@ -33,10 +40,6 @@ function LoginScreen() {
       console.log(error);
       alert("sign in failed: " + error.message);
     }
-  };
-
-  const signUp = async () => {
-    navigation.navigate("CreateAccount");
   };
 
   return (
@@ -73,4 +76,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default CreateAccountScreen;

@@ -1,4 +1,3 @@
-
 import LoginScreen from "./app/screens/LoginScreen";
 import CreateAccountScreen from "./app/screens/CreateAccountScreen";
 import HomePageScreen from "./app/screens/HomePageScreen";
@@ -13,7 +12,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="LogIn">
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}
@@ -38,12 +37,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
