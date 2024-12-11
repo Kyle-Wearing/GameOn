@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "GameOn",
+    "slug": "GameOn",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./app/assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./app/assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "googleServicesFile": "./googleService-Info.plist",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.GameOn"
+    },
+    "android": {
+      "googleServicesFile": "google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.anonymous.GameOn"
+    },
+    "web": {
+      "favicon": "./app/assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
+  }
+}
