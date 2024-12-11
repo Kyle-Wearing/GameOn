@@ -1,3 +1,4 @@
+
 import LoginScreen from "./app/screens/LoginScreen";
 import CreateAccountScreen from "./app/screens/CreateAccountScreen";
 import HomePageScreen from "./app/screens/HomePageScreen";
@@ -35,7 +36,7 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
