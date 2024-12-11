@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   SafeAreaView,
-  SafeAreaViewBase,
 } from "react-native";
 
 function LoginScreen(props) {
@@ -16,6 +15,14 @@ function LoginScreen(props) {
       <TextInput style={styles.input} value={"Username Here"} />
       <TextInput style={styles.input} value={"Password Here"} />
       <Button title="Log In">Log In</Button>
+      <Button
+        title="Create Account"
+        onPress={() => {
+          props.navigation.navigate("CreateAccount");
+        }}
+      >
+        Create Account
+      </Button>
     </SafeAreaView>
   );
 }
