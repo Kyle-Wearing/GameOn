@@ -4,20 +4,16 @@ import React from "react";
 import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const MyTabs = createBottomTabNavigator({
-  screens: {
-    Home: HomePageScreen,
-    // Profile: UserPageScreen,
-    // JoinGroup: JoinGroupScreen,
-  },
-});
+// const MyTabs = createBottomTabNavigator({
+//   screens: {
+//     Home: HomePageScreen,
+//     // Profile: UserPageScreen,
+//     // JoinGroup: JoinGroupScreen,
+//   },
+// });
 
 function HomePageScreen() {
-  return (
-    <SafeAreaView>
-      <MyTabs />
-    </SafeAreaView>
-  );
+  return <SafeAreaView>{/* <MyTabs /> */}</SafeAreaView>;
 }
 
 export default HomePageScreen;
