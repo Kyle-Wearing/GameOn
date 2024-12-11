@@ -6,6 +6,8 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
+  Text,
+  ActivityIndicator,
 } from "react-native";
 
 import { auth } from "../../FirebaseConfig";
@@ -17,21 +19,30 @@ function LoginScreen() {
   const [password, setpassowrd] = useState("");
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
   };
 
   const signIn = async () => {
+    setLoading(true);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+      setLoading(false);
       console.log(user.user.uid);
       if (user) {
         navigation.navigate("HomePage");
       }
     } catch (error: any) {
+      setLoading(false);
       console.log(error);
-      alert("sign in failed: " + error.message);
+      const index = error.code.indexOf("/");
+      const errorMsg = error.code
+        .slice(index + 1)
+        .split("-")
+        .join(" ");
+      alert("sign in failed: " + errorMsg);
     }
   };
 
@@ -43,12 +54,14 @@ function LoginScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
         <TextInput
+          keyboardType="email-address"
           placeholder="email"
           style={styles.input}
           value={email}
           onChangeText={setEmail}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
+          editable={!loading}
         />
         <TextInput
           placeholder="password"
@@ -58,8 +71,13 @@ function LoginScreen() {
           ref={refPasswordInput}
           secureTextEntry={true}
           returnKeyType="done"
+          editable={!loading}
         />
-        <Button title={"Log in"} onPress={signIn}></Button>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Button title={"Log in"} onPress={signIn}></Button>
+        )}
         <Button title={"Sign up"} onPress={signUp}></Button>
       </View>
     </TouchableWithoutFeedback>

@@ -6,6 +6,7 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 
 import { auth } from "../../FirebaseConfig";
@@ -17,6 +18,7 @@ function CreateAccountScreen() {
   const [password, setpassowrd] = useState("");
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -27,14 +29,22 @@ function CreateAccountScreen() {
   };
 
   const signUp = async () => {
+    setLoading(true);
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
+      setLoading(false);
       if (user) {
         navigation.navigate("HomePage");
       }
     } catch (error: any) {
+      setLoading(false);
       console.log(error);
-      alert("sign in failed: " + error.message);
+      const index = error.code.indexOf("/");
+      const errorMsg = error.code
+        .slice(index + 1)
+        .split("-")
+        .join(" ");
+      alert("sign in failed: " + errorMsg);
     }
   };
 
@@ -42,12 +52,14 @@ function CreateAccountScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={{ flex: 1 }}>
         <TextInput
+          keyboardType="email-address"
           placeholder="email"
           style={styles.input}
           value={email}
           onChangeText={setEmail}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
+          editable={!loading}
         />
         <TextInput
           placeholder="password"
@@ -57,9 +69,14 @@ function CreateAccountScreen() {
           ref={refPasswordInput}
           secureTextEntry={true}
           returnKeyType="done"
+          editable={!loading}
         />
         <Button title={"Log in"} onPress={signIn}></Button>
-        <Button title={"Sign up"} onPress={signUp}></Button>
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <Button title={"Sign up"} onPress={signUp}></Button>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
