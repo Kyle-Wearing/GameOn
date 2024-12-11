@@ -1,3 +1,4 @@
+
 import LoginScreen from "./app/screens/LoginScreen";
 import CreateAccountScreen from "./app/screens/CreateAccountScreen";
 import HomePageScreen from "./app/screens/HomePageScreen";
@@ -35,13 +36,15 @@ export default function App() {
         />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+
+    backgroundColor: "#FFFFFF",
+
     alignItems: "center",
     justifyContent: "center",
   },
