@@ -30,9 +30,9 @@ const NavTab = () => {
           if (rn === homeName) {
             iconName = focused ? "home" : "home-outline";
           } else if (rn === userPageName) {
-            iconName = focused ? "list" : "list-outline";
+            iconName = focused ? "person" : "person-outline";
           } else if (rn === joinGroupName) {
-            iconName = focused ? "settings" : "settings-outline";
+            iconName = focused ? "people" : "people-outline";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
