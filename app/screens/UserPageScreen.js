@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  Image,
-  TextInput,
-  Alert,
-} from "react-native";
+import { Text, SafeAreaView, Image, Alert, Button } from "react-native";
 
-function UserPageScreen() {
+function UserPageScreen({ navigation }) {
   return (
     <SafeAreaView>
       <Text>Profile Page</Text>

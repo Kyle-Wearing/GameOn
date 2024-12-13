@@ -27,7 +27,7 @@ function LoginScreen() {
       const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user.user.uid);
       if (user) {
-        navigation.navigate("HomePage");
+        navigation.navigate("GameOn");
       }
     } catch (error: any) {
       console.log(error);

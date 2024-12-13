@@ -1,10 +1,15 @@
 import React from "react";
-// import UserPageScreen from "./app/screens/UserPageScreen";
-// import JoinGroupScreen from "./app/screens/JoinGroupScreen";
-import { View, StyleSheet, Text, SafeAreaView } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text, SafeAreaView } from "react-native";
 
-function HomePageScreen() {
-  return <SafeAreaView></SafeAreaView>;
+const Tab = createBottomTabNavigator();
+
+function HomePageScreen({ navigation }) {
+  return (
+    <SafeAreaView>
+      <Text>Hello Home Screen</Text>
+    </SafeAreaView>
+  );
 }
 
 export default HomePageScreen;
