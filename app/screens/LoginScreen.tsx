@@ -8,7 +8,12 @@ import {
   TouchableWithoutFeedback,
   Text,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
+
+import { loginStyle } from "../styles/loginPage";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { auth } from "../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -16,10 +21,11 @@ import { useNavigation } from "@react-navigation/native";
 
 function LoginScreen() {
   const [email, setEmail] = useState("");
-  const [password, setpassowrd] = useState("");
+  const [password, setPassword] = useState("");
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -50,45 +56,65 @@ function LoginScreen() {
     navigation.navigate("CreateAccount");
   };
 
+  const passwordVisibility = () => {
+    setHidePassword(!hidePassword);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1 }}>
+      <View style={loginStyle.pageContainer}>
         <TextInput
           keyboardType="email-address"
-          placeholder="email"
-          style={styles.input}
+          placeholder="Enter Email Address"
+          style={loginStyle.input}
           value={email}
           onChangeText={setEmail}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
           editable={!loading}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
-        <TextInput
-          placeholder="password"
-          style={styles.input}
-          value={password}
-          onChangeText={setpassowrd}
-          ref={refPasswordInput}
-          secureTextEntry={true}
-          returnKeyType="done"
-          editable={!loading}
-        />
+        <View style={loginStyle.input}>
+          <TextInput
+            style={{ fontSize: 16, flex: 1 }}
+            placeholder="Enter Password"
+            value={password}
+            onChangeText={setPassword}
+            ref={refPasswordInput}
+            secureTextEntry={hidePassword}
+            returnKeyType="done"
+            editable={!loading}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity
+            style={loginStyle.iconButton}
+            onPress={passwordVisibility}
+          >
+            <Ionicons
+              name={hidePassword ? "eye-outline" : "eye-off-outline"}
+              size={20}
+              color={"black"}
+            ></Ionicons>
+          </TouchableOpacity>
+        </View>
         {loading ? (
           <ActivityIndicator />
         ) : (
-          <Button title={"Log in"} onPress={signIn}></Button>
+          <TouchableOpacity style={loginStyle.button} onPress={signIn}>
+            <Text style={loginStyle.buttonText}>Log In</Text>
+          </TouchableOpacity>
         )}
-        <Button title={"Sign up"} onPress={signUp}></Button>
+        <View style={loginStyle.container}>
+          <Text style={loginStyle.text}>Don't have an account?</Text>
+          <TouchableOpacity onPress={signUp} style={loginStyle.button}>
+            <Text style={loginStyle.buttonText}>Sign up!</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-  },
-});
 
 export default LoginScreen;
