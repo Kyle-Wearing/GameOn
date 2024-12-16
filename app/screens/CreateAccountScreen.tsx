@@ -52,9 +52,10 @@ function CreateAccountScreen() {
           email,
           password
         );
+        console.log(user.user.uid);
         setLoading(false);
         if (user) {
-          navigation.navigate("HomePage");
+          navigation.navigate("GameOn");
         }
       } catch (error: any) {
         setLoading(false);
