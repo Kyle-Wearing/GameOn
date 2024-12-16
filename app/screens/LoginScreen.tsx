@@ -20,7 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../userContext";
 
 function LoginScreen() {
-  const [email, setEmail] = useState("kyle@test.com");
+  const [email, setEmail] = useState("test@test.com");
   const [password, setPassword] = useState("123456");
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
