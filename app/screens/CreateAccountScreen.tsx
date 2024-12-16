@@ -56,6 +56,7 @@ function CreateAccountScreen() {
           email,
           password
         );
+        console.log(user.user.uid);
         setLoading(false);
         if (user) {
           postUser(user.user.uid, email, username);
