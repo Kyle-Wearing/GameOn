@@ -1,6 +1,10 @@
 import MainContainer from "./app/screens/MainContainer";
-
+import { UserProvider } from "./userContext";
 
 export default function App() {
-  return <MainContainer />;
+  return (
+    <UserProvider>
+      <MainContainer />
+    </UserProvider>
+  );
 }

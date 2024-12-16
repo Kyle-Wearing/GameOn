@@ -1,8 +1,6 @@
 import React, { useRef, useState } from "react";
 import {
   View,
-  StyleSheet,
-  Button,
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
@@ -13,6 +11,7 @@ import {
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+import { postUser } from "../../until";
 import { auth } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
@@ -20,10 +19,12 @@ import { loginStyle } from "../styles/loginPage";
 
 function CreateAccountScreen() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassowrd] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const refPasswordInput = useRef(null);
   const refConfirmPasswordInput = useRef(null);
+  const refEmailInput = useRef(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
@@ -33,6 +34,9 @@ function CreateAccountScreen() {
   };
   const focusOnConfirmPassword = () => {
     refConfirmPasswordInput?.current?.focus();
+  };
+  const focusOnEmail = () => {
+    refEmailInput?.current?.focus();
   };
 
   const passwordVisibility = () => {
@@ -52,9 +56,9 @@ function CreateAccountScreen() {
           email,
           password
         );
-        console.log(user.user.uid);
         setLoading(false);
         if (user) {
+          postUser(user.user.uid, email, username);
           navigation.navigate("GameOn");
         }
       } catch (error: any) {
@@ -76,6 +80,18 @@ function CreateAccountScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={loginStyle.pageContainer}>
         <TextInput
+          placeholder="Enter Username"
+          style={loginStyle.input}
+          value={username}
+          onChangeText={setUsername}
+          onSubmitEditing={focusOnEmail}
+          returnKeyType="next"
+          editable={!loading}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+        <TextInput
+          ref={refEmailInput}
           keyboardType="email-address"
           placeholder="Enter Email Address"
           style={loginStyle.input}
