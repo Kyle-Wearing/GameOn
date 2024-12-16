@@ -6,20 +6,37 @@ import {
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator,
+  TouchableOpacity,
+  Text,
 } from "react-native";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { auth } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import { loginStyle } from "../styles/loginPage";
 
 function CreateAccountScreen() {
   const [email, setEmail] = useState("");
-  const [password, setpassowrd] = useState("");
+  const [password, setPassowrd] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const refPasswordInput = useRef(null);
+  const refConfirmPasswordInput = useRef(null);
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
+  };
+  const focusOnConfirmPassword = () => {
+    refConfirmPasswordInput?.current?.focus();
+  };
+
+  const passwordVisibility = () => {
+    setHidePassword(!hidePassword);
   };
 
   const signIn = async () => {
@@ -27,49 +44,102 @@ function CreateAccountScreen() {
   };
 
   const signUp = async () => {
-    try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      if (user) {
-        navigation.navigate("HomePage");
+    if (confirmPassword === password) {
+      setLoading(true);
+      try {
+        const user = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        setLoading(false);
+        if (user) {
+          navigation.navigate("HomePage");
+        }
+      } catch (error: any) {
+        setLoading(false);
+        console.log(error);
+        const index = error.code.indexOf("/");
+        const errorMsg = error.code
+          .slice(index + 1)
+          .split("-")
+          .join(" ");
+        alert("sign in failed: " + errorMsg);
       }
-    } catch (error: any) {
-      console.log(error);
-      alert("sign in failed: " + error.message);
+    } else {
+      alert("passwords do no match");
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={{ flex: 1 }}>
+      <View style={loginStyle.pageContainer}>
         <TextInput
-          placeholder="email"
-          style={styles.input}
+          keyboardType="email-address"
+          placeholder="Enter Email Address"
+          style={loginStyle.input}
           value={email}
           onChangeText={setEmail}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
+          editable={!loading}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
+        <View style={loginStyle.input}>
+          <TextInput
+            style={{ fontSize: 16, flex: 1 }}
+            placeholder="Enter Password"
+            value={password}
+            onChangeText={setPassowrd}
+            ref={refPasswordInput}
+            secureTextEntry={hidePassword}
+            onSubmitEditing={focusOnConfirmPassword}
+            returnKeyType="next"
+            editable={!loading}
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
+          <TouchableOpacity
+            style={loginStyle.iconButton}
+            onPress={passwordVisibility}
+          >
+            <Ionicons
+              name={hidePassword ? "eye-outline" : "eye-off-outline"}
+              size={20}
+              color={"black"}
+            ></Ionicons>
+          </TouchableOpacity>
+        </View>
         <TextInput
-          placeholder="password"
-          style={styles.input}
-          value={password}
-          onChangeText={setpassowrd}
-          ref={refPasswordInput}
-          secureTextEntry={true}
+          placeholder="Confirm Password"
+          style={loginStyle.input}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          ref={refConfirmPasswordInput}
+          secureTextEntry={hidePassword}
           returnKeyType="done"
+          editable={!loading}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
-        <Button title={"Log in"} onPress={signIn}></Button>
-        <Button title={"Sign up"} onPress={signUp}></Button>
+
+        {loading ? (
+          <ActivityIndicator />
+        ) : (
+          <TouchableOpacity style={loginStyle.button} onPress={signUp}>
+            <Text style={loginStyle.buttonText}> Sign Up</Text>
+          </TouchableOpacity>
+        )}
+        <View style={loginStyle.container}>
+          <Text style={loginStyle.text}>Already have an account?</Text>
+          <TouchableOpacity onPress={signIn} style={loginStyle.button}>
+            <Text style={loginStyle.buttonText}>log in</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  input: {
-    height: 40,
-    margin: 12,
-  },
-});
 
 export default CreateAccountScreen;
