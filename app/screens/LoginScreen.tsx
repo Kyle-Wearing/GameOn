@@ -38,7 +38,7 @@ function LoginScreen() {
       setLoading(false);
       console.log(user.user.uid);
       if (user) {
-        navigation.navigate("HomePage");
+        navigation.navigate("GameOn");
       }
     } catch (error: any) {
       setLoading(false);
