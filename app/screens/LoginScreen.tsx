@@ -1,8 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   View,
-  StyleSheet,
-  Button,
   TextInput,
   Keyboard,
   TouchableWithoutFeedback,
@@ -12,20 +10,23 @@ import {
 } from "react-native";
 
 import { loginStyle } from "../styles/loginPage";
+import { getUser } from "../../until";
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { auth } from "../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
+import { UserContext } from "../../userContext";
 
 function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("kyle@test.com");
+  const [password, setPassword] = useState("123456");
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+  const { setUser } = useContext(UserContext);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -36,8 +37,9 @@ function LoginScreen() {
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
       setLoading(false);
-      console.log(user.user.uid);
       if (user) {
+        const newUser = await getUser(user.user.uid);
+        setUser(newUser);
         navigation.navigate("GameOn");
       }
     } catch (error: any) {
