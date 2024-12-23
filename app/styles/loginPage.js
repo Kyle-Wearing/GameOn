@@ -39,7 +39,6 @@ export const loginStyle = StyleSheet.create({
     fontSize: 16,
     backgroundColor: "#fff",
     marginBottom: 16,
-
     flexDirection: "row",
   },
   iconButton: {
