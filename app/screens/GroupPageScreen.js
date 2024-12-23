@@ -11,6 +11,7 @@ export function GroupsPageScreen({ route }) {
   useEffect(() => {
     const getGroupData = async () => {
       const group = await getGroupByGroupId(id);
+      setMembers(group.members);
       setName(group.groupName);
     };
 
@@ -20,7 +21,11 @@ export function GroupsPageScreen({ route }) {
   return (
     <>
       <Text>{name}</Text>
-      <ScrollView></ScrollView>
+      <ScrollView>
+        {members.map((member) => {
+          return <Text key={member.uid}>{member.username}</Text>;
+        })}
+      </ScrollView>
     </>
   );
 }
