@@ -38,12 +38,16 @@ export const loginStyle = StyleSheet.create({
     paddingLeft: 15,
     fontSize: 16,
     backgroundColor: "#fff",
-    marginBottom: 15,
+    marginBottom: 16,
 
     flexDirection: "row",
   },
   iconButton: {
     justifyContent: "center",
     padding: 10,
+  },
+  errorText: {
+    color: "red",
+    marginTop: -15,
   },
 });

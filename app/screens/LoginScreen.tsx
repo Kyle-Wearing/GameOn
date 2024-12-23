@@ -27,6 +27,7 @@ function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const { setUser } = useContext(UserContext);
+  const [error, setError] = useState("");
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -44,13 +45,12 @@ function LoginScreen() {
       }
     } catch (error: any) {
       setLoading(false);
-      console.log(error);
       const index = error.code.indexOf("/");
       const errorMsg = error.code
         .slice(index + 1)
         .split("-")
         .join(" ");
-      alert("sign in failed: " + errorMsg);
+      setError(errorMsg);
     }
   };
 
@@ -70,7 +70,10 @@ function LoginScreen() {
           placeholder="Enter Email Address"
           style={loginStyle.input}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => {
+            setEmail(text);
+            setError("");
+          }}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
           editable={!loading}
@@ -82,7 +85,10 @@ function LoginScreen() {
             style={{ fontSize: 16, flex: 1 }}
             placeholder="Enter Password"
             value={password}
-            onChangeText={setPassword}
+            onChangeText={(text) => {
+              setPassword(text);
+              setError("");
+            }}
             ref={refPasswordInput}
             secureTextEntry={hidePassword}
             returnKeyType="done"
@@ -101,6 +107,7 @@ function LoginScreen() {
             ></Ionicons>
           </TouchableOpacity>
         </View>
+        {error ? <Text style={loginStyle.errorText}>{error}</Text> : null}
         {loading ? (
           <ActivityIndicator />
         ) : (

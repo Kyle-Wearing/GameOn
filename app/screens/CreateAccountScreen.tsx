@@ -28,6 +28,7 @@ function CreateAccountScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+  const [error, setError] = useState("");
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -48,32 +49,36 @@ function CreateAccountScreen() {
   };
 
   const signUp = async () => {
-    if (confirmPassword === password) {
-      setLoading(true);
-      try {
-        const user = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
-        console.log(user.user.uid);
-        setLoading(false);
-        if (user) {
-          postUser(user.user.uid, email, username);
-          navigation.navigate("GameOn");
+    if (username) {
+      if (confirmPassword === password) {
+        setLoading(true);
+        try {
+          const user = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+          console.log(user.user.uid);
+          setLoading(false);
+          if (user) {
+            postUser(user.user.uid, email, username);
+            navigation.navigate("GameOn");
+          }
+        } catch (error: any) {
+          setLoading(false);
+
+          const index = error.code.indexOf("/");
+          const errorMsg = error.code
+            .slice(index + 1)
+            .split("-")
+            .join(" ");
+          setError(errorMsg);
         }
-      } catch (error: any) {
-        setLoading(false);
-        console.log(error);
-        const index = error.code.indexOf("/");
-        const errorMsg = error.code
-          .slice(index + 1)
-          .split("-")
-          .join(" ");
-        alert("sign in failed: " + errorMsg);
+      } else {
+        setError("passwords do not match");
       }
     } else {
-      alert("passwords do no match");
+      setError("must enter a username");
     }
   };
 
@@ -84,7 +89,10 @@ function CreateAccountScreen() {
           placeholder="Enter Username"
           style={loginStyle.input}
           value={username}
-          onChangeText={setUsername}
+          onChangeText={(text) => {
+            setUsername(text);
+            setError("");
+          }}
           onSubmitEditing={focusOnEmail}
           returnKeyType="next"
           editable={!loading}
@@ -97,7 +105,10 @@ function CreateAccountScreen() {
           placeholder="Enter Email Address"
           style={loginStyle.input}
           value={email}
-          onChangeText={setEmail}
+          onChangeText={(text) => {
+            setEmail(text);
+            setError("");
+          }}
           onSubmitEditing={focusOnPassword}
           returnKeyType="next"
           editable={!loading}
@@ -109,7 +120,10 @@ function CreateAccountScreen() {
             style={{ fontSize: 16, flex: 1 }}
             placeholder="Enter Password"
             value={password}
-            onChangeText={setPassowrd}
+            onChangeText={(text) => {
+              setPassowrd(text);
+              setError("");
+            }}
             ref={refPasswordInput}
             secureTextEntry={hidePassword}
             onSubmitEditing={focusOnConfirmPassword}
@@ -133,7 +147,10 @@ function CreateAccountScreen() {
           placeholder="Confirm Password"
           style={loginStyle.input}
           value={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={(text) => {
+            setConfirmPassword(text);
+            setError("");
+          }}
           ref={refConfirmPasswordInput}
           secureTextEntry={hidePassword}
           returnKeyType="done"
@@ -141,7 +158,7 @@ function CreateAccountScreen() {
           autoCapitalize="none"
           autoCorrect={false}
         />
-
+        {error ? <Text style={loginStyle.errorText}>{error}</Text> : null}
         {loading ? (
           <ActivityIndicator />
         ) : (
