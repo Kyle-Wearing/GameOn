@@ -65,11 +65,7 @@ function MainContainer() {
           component={CreateAccountScreen}
           options={{ title: "CreateAccount" }}
         />
-        <Stack.Screen
-          name="GameOn"
-          component={NavTab}
-          options={{ title: "GameOn" }}
-        />
+        <Stack.Screen name="GameOn" component={NavTab} />
         <Stack.Screen name="GroupScreen" component={GroupsPageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
