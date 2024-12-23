@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text } from "react-native";
 import { getGroupByGroupId } from "../../until";
+import { groupPage } from "../styles/groupPage";
+import { View } from "react-native";
 
 export function GroupsPageScreen({ route }) {
   const { id } = route.params;
@@ -19,13 +21,13 @@ export function GroupsPageScreen({ route }) {
   }, []);
 
   return (
-    <>
+    <SafeAreaView style={groupPage.container}>
       <Text>{name}</Text>
-      <ScrollView>
+      <View>
         {members.map((member) => {
           return <Text key={member.uid}>{member.username}</Text>;
         })}
-      </ScrollView>
-    </>
+      </View>
+    </SafeAreaView>
   );
 }
