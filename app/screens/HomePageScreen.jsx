@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getGroupsByUID } from "../../until";
 import { UserContext } from "../../userContext";
