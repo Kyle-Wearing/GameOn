@@ -40,7 +40,7 @@ function LoginScreen() {
       setLoading(false);
       if (user) {
         const newUser = await getUser(user.user.uid);
-        setUser(newUser);
+        setUser({ ...newUser, uid: user.user.uid });
         navigation.navigate("GameOn");
       }
     } catch (error: any) {
