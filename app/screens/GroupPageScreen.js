@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Text } from "react-native";
-import { getGroupByGroupId, getUser } from "../../until";
+import { getGroupByGroupId } from "../../until";
 
 export function GroupsPageScreen({ route }) {
   const { id } = route.params;

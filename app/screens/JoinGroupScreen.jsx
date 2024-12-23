@@ -12,7 +12,7 @@ function JoinGroupScreen() {
   const [createVisible, setCreateVisible] = useState(false);
   const [joinCode, setJoinCode] = useState("");
   const [groupName, setGroupName] = useState("");
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const navigation = useNavigation();
 
   function handleCreateModal() {
