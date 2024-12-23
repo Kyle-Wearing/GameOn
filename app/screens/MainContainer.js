@@ -10,6 +10,7 @@ import UserPageScreen from "./UserPageScreen";
 import JoinGroupScreen from "./JoinGroupScreen";
 import LoginScreen from "./LoginScreen";
 import CreateAccountScreen from "./CreateAccountScreen";
+import { GroupsPageScreen } from "./GroupPageScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -69,6 +70,7 @@ function MainContainer() {
           component={NavTab}
           options={{ title: "GameOn" }}
         />
+        <Stack.Screen name="GroupScreen" component={GroupsPageScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
