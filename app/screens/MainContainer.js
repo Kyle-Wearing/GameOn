@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const NavTab = () => {
   const homeName = "Home";
   const userPageName = "User";
-  const joinGroupName = "Group";
+  const joinGroupName = "Groups";
   return (
     <Tab.Navigator
       initialRouteName={homeName}
@@ -58,15 +58,23 @@ function MainContainer() {
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}
-          options={{ title: "LogIn" }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
           name="CreateAccount"
           component={CreateAccountScreen}
-          options={{ title: "CreateAccount" }}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen name="GameOn" component={NavTab} />
-        <Stack.Screen name="GroupScreen" component={GroupsPageScreen} />
+        <Stack.Screen
+          name="GameOn"
+          component={NavTab}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="GroupScreen"
+          component={GroupsPageScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
