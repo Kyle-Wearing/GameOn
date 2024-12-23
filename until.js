@@ -1,4 +1,4 @@
-import { ref, set, get } from "firebase/database";
+import { ref, set, get, push, update, child } from "firebase/database";
 import { db } from "./FirebaseConfig";
 
 export function postUser(uid, email, username) {
@@ -28,12 +28,30 @@ export function getGroupsByUID(uid) {
     });
 }
 
-export function getGroupByGroupId(id) {
-  return get(ref(db, `/groups/${id}`))
+export async function getGroupByGroupId(id) {
+  return get(ref(db, `groups/${id}`))
     .then((res) => {
       return res.val();
     })
     .catch((err) => {
       console.log(err);
     });
+}
+
+export function createGroup(groupName, uid, username) {
+  const user = { uid, username };
+  const postRef = ref(db, "groups");
+  const newPostRef = push(postRef);
+  set(newPostRef, {
+    groupName,
+    members: [user],
+  });
+  return newPostRef;
+}
+
+export async function joinGroupById(group_id, uid) {
+  const group = await getGroupByGroupId(group_id);
+  set(ref(db, `users/${uid}/groups/${group_id}`), {
+    groupName: group.groupName,
+  });
 }

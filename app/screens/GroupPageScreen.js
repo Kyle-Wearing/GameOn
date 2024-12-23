@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
-import { Text } from "react-native";
-import { getGroupByGroupId } from "../../until";
+import { ScrollView, Text } from "react-native";
+import { getGroupByGroupId, getUser } from "../../until";
 
 export function GroupsPageScreen({ route }) {
   const { id } = route.params;
 
   const [name, setName] = useState("");
+  const [members, setMembers] = useState([]);
 
   useEffect(() => {
-    getGroupByGroupId(id).then((group) => {
+    const getGroupData = async () => {
+      const group = await getGroupByGroupId(id);
       setName(group.groupName);
-    });
+    };
+
+    getGroupData();
   }, []);
 
-  return <Text>{name}</Text>;
+  return (
+    <>
+      <Text>{name}</Text>
+      <ScrollView></ScrollView>
+    </>
+  );
 }

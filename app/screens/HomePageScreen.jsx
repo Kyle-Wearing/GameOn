@@ -14,10 +14,17 @@ function HomePageScreen() {
   useEffect(() => {
     if (user.groups) {
       getGroupsByUID(user.uid).then((newGroups) => {
-        setGroups(newGroups);
+        const groupArr = [];
+        for (const group in newGroups) {
+          groupArr.push({
+            group_id: group,
+            groupName: newGroups[group].groupName,
+          });
+        }
+        setGroups(groupArr);
       });
     }
-  }, []);
+  }, [groups]);
 
   function handlePress(id) {
     navigation.navigate("GroupScreen", { id });
@@ -35,7 +42,7 @@ function HomePageScreen() {
                   handlePress(group.group_id);
                 }}
               >
-                <Text>{group.title}</Text>
+                <Text>{group.groupName}</Text>
               </TouchableOpacity>
             );
           })}
