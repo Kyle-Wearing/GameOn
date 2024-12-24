@@ -19,7 +19,7 @@ export const joinGroup = StyleSheet.create({
     flexDirection: "row",
   },
   modalView: {
-    width: width * 0.5,
+    width: width * 0.7,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 25,

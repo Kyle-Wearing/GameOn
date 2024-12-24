@@ -26,9 +26,12 @@ function JoinGroupScreen() {
   }
 
   function handleJoinGroup() {
-    joinGroupById(joinCode, user.uid)
+    joinGroupById(joinCode, user.uid, user.username)
       .then(() => {
-        navigation.goBack();
+        setJoinVisible(false);
+        navigation.navigate("GameOn", {
+          screen: "Home",
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -38,12 +41,14 @@ function JoinGroupScreen() {
   function handleCreateGroup() {
     if (groupName) {
       setCreateVisible(false);
-      createGroup(groupName, user.uid, user.username)
+      createGroup(groupName)
         .then((code) => {
           const codeStr = code.toString();
           const group_id = codeStr.split("/")[4];
-          joinGroupById(group_id, user.uid);
-          navigation.goBack();
+          joinGroupById(group_id, user.uid, user.username);
+          navigation.navigate("GameOn", {
+            screen: "Home",
+          });
         })
         .catch((err) => {
           console.log(err);

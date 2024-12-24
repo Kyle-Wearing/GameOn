@@ -38,20 +38,22 @@ export async function getGroupByGroupId(id) {
     });
 }
 
-export function createGroup(groupName, uid, username) {
-  const user = { uid, username };
+export function createGroup(groupName) {
   const postRef = ref(db, "groups");
   const newPostRef = push(postRef);
   set(newPostRef, {
     groupName,
-    members: [user],
   });
   return newPostRef;
 }
 
-export async function joinGroupById(group_id, uid) {
+export async function joinGroupById(group_id, uid, username) {
   const group = await getGroupByGroupId(group_id);
   set(ref(db, `users/${uid}/groups/${group_id}`), {
     groupName: group.groupName,
+  });
+  set(ref(db, `groups/${group_id}/members/${uid}`), {
+    username,
+    wins: 0,
   });
 }
