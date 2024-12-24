@@ -57,3 +57,11 @@ export async function joinGroupById(group_id, uid, username) {
     wins: 0,
   });
 }
+
+export function updateGroupSettings(group_id, newName, members) {
+  set(ref(db, `groups/${group_id}/groupName`), newName);
+  members.forEach((member) => {
+    const uid = member.uid;
+    set(ref(db, `users/${uid}/groups/${group_id}/groupName`), newName);
+  });
+}

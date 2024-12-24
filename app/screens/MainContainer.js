@@ -11,6 +11,7 @@ import JoinGroupScreen from "./JoinGroupScreen";
 import LoginScreen from "./LoginScreen";
 import CreateAccountScreen from "./CreateAccountScreen";
 import { GroupsPageScreen } from "./GroupPageScreen";
+import GroupSettingsScreen from "./GroupSettingsScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,6 +74,11 @@ function MainContainer() {
         <Stack.Screen
           name="GroupScreen"
           component={GroupsPageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="GroupSettingsScreen"
+          component={GroupSettingsScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
