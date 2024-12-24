@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { Modal } from "react-native";
 import { Text, SafeAreaView, TextInput, Button } from "react-native";
 import { joinGroup } from "../styles/joinGroup";
@@ -26,9 +26,12 @@ function JoinGroupScreen() {
   }
 
   function handleJoinGroup() {
-    joinGroupById(joinCode, user.uid)
+    joinGroupById(joinCode, user.uid, user.username)
       .then(() => {
-        navigation.goBack();
+        setJoinVisible(false);
+        navigation.navigate("GameOn", {
+          screen: "Home",
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -38,12 +41,14 @@ function JoinGroupScreen() {
   function handleCreateGroup() {
     if (groupName) {
       setCreateVisible(false);
-      createGroup(groupName, user.uid, user.username)
+      createGroup(groupName)
         .then((code) => {
           const codeStr = code.toString();
           const group_id = codeStr.split("/")[4];
-          joinGroupById(group_id, user.uid);
-          navigation.goBack();
+          joinGroupById(group_id, user.uid, user.username);
+          navigation.navigate("GameOn", {
+            screen: "Home",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -54,7 +59,7 @@ function JoinGroupScreen() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <Modal animationType="none" transparent={true} visible={joinVisible}>
         <View style={joinGroup.centeredView}>
           <View style={joinGroup.modalView}>
@@ -90,10 +95,25 @@ function JoinGroupScreen() {
         </View>
       </Modal>
 
-      <Text>Have a join code?</Text>
-      <Button title="Join a group" onPress={handleJoinModal}></Button>
-      <Text>Make a new group to play with friends and family</Text>
-      <Button title="Create a group" onPress={handleCreateModal}></Button>
+      <View style={joinGroup.container}>
+        <View style={joinGroup.textContainer}>
+          <Text style={joinGroup.text}>Have a join code?</Text>
+          <TouchableOpacity style={joinGroup.button} onPress={handleJoinModal}>
+            <Text style={joinGroup.buttonText}>Join a group</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={joinGroup.textContainer}>
+          <Text style={joinGroup.text}>
+            Make a new group to play with friends and family
+          </Text>
+          <TouchableOpacity
+            style={joinGroup.button}
+            onPress={handleCreateModal}
+          >
+            <Text style={joinGroup.buttonText}>Create a group</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 }
