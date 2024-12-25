@@ -14,7 +14,7 @@ export async function getUser(uid) {
       return res.val();
     })
     .catch((err) => {
-      console.log("erroe");
+      console.log("get user", err);
     });
 }
 
@@ -24,7 +24,7 @@ export function getGroupsByUID(uid) {
       return res.val();
     })
     .catch((err) => {
-      console.log(err);
+      console.log("get groups by uid", err);
     });
 }
 
@@ -34,7 +34,7 @@ export async function getGroupByGroupId(id) {
       return res.val();
     })
     .catch((err) => {
-      console.log(err);
+      console.log("get group by id", err);
     });
 }
 
@@ -55,5 +55,13 @@ export async function joinGroupById(group_id, uid, username) {
   set(ref(db, `groups/${group_id}/members/${uid}`), {
     username,
     wins: 0,
+  });
+}
+
+export function updateGroupSettings(group_id, newName, members) {
+  set(ref(db, `groups/${group_id}/groupName`), newName);
+  members.forEach((member) => {
+    const uid = member.uid;
+    set(ref(db, `users/${uid}/groups/${group_id}/groupName`), newName);
   });
 }
