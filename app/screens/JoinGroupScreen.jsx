@@ -18,11 +18,13 @@ function JoinGroupScreen() {
 
   function handleCreateModal() {
     setGroupName("");
+    setError("");
     setCreateVisible(!createVisible);
   }
 
   function handleJoinModal() {
     setJoinCode("");
+    setError("");
     setJoinVisible(!joinVisible);
   }
 
@@ -64,7 +66,7 @@ function JoinGroupScreen() {
           console.log(err);
         });
     } else {
-      alert("must enter group name");
+      setError("must enter a group name");
     }
   }
 
@@ -103,6 +105,7 @@ function JoinGroupScreen() {
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {error ? <Text style={joinGroup.errorText}>{error}</Text> : null}
             <Button title="create group" onPress={handleCreateGroup}></Button>
             <Button title="back" onPress={handleCreateModal}></Button>
           </View>

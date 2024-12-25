@@ -47,11 +47,13 @@ export const joinGroup = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
     marginBottom: 10,
     color: "#333",
     textAlign: "center",
+    marginLeft: width * 0.1,
+    marginRight: width * 0.1,
   },
   button: {
     backgroundColor: "#007bff",
