@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Modal } from "react-native";
 import { Text, SafeAreaView, TextInput, Button } from "react-native";
 import { joinGroup } from "../styles/joinGroup";
-import { createGroup, joinGroupById } from "../../until";
+import { checkInGroup, createGroup, joinGroupById } from "../../until";
 import { UserContext } from "../../userContext";
 import { useNavigation } from "@react-navigation/native";
 
@@ -13,6 +13,7 @@ function JoinGroupScreen() {
   const [joinCode, setJoinCode] = useState("");
   const [groupName, setGroupName] = useState("");
   const { user } = useContext(UserContext);
+  const [error, setError] = useState("");
   const navigation = useNavigation();
 
   function handleCreateModal() {
@@ -25,17 +26,26 @@ function JoinGroupScreen() {
     setJoinVisible(!joinVisible);
   }
 
-  function handleJoinGroup() {
-    joinGroupById(joinCode, user.uid, user.username)
-      .then(() => {
-        setJoinVisible(false);
-        navigation.navigate("GameOn", {
-          screen: "Home",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  async function handleJoinGroup() {
+    if (joinCode) {
+      const check = await checkInGroup(joinCode, user.uid);
+      if (!check) {
+        joinGroupById(joinCode, user.uid, user.username)
+          .then(() => {
+            setJoinVisible(false);
+            navigation.navigate("GameOn", {
+              screen: "Home",
+            });
+          })
+          .catch((err) => {
+            setError("invalid join code");
+          });
+      } else {
+        setError("you are already in this group");
+      }
+    } else {
+      setError("must enter a join code");
+    }
   }
 
   function handleCreateGroup() {
@@ -67,11 +77,15 @@ function JoinGroupScreen() {
             <TextInput
               style={joinGroup.input}
               value={joinCode}
-              onChangeText={setJoinCode}
+              onChangeText={(text) => {
+                setJoinCode(text);
+                setError("");
+              }}
               returnKeyType="done"
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {error ? <Text style={joinGroup.errorText}>{error}</Text> : null}
             <Button title="join group" onPress={handleJoinGroup}></Button>
             <Button title="back" onPress={handleJoinModal}></Button>
           </View>
