@@ -96,7 +96,7 @@ export function GroupsPageScreen({ route }) {
         <View style={groupPage.calander}>
           <TouchableOpacity
             style={groupPage.button}
-            onPress={() => alert("to be added")}
+            onPress={() => navigation.navigate("GroupCalanderScreen")}
           >
             <Text style={groupPage.buttonText}>calander</Text>
           </TouchableOpacity>

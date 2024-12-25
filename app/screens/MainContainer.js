@@ -12,6 +12,7 @@ import LoginScreen from "./LoginScreen";
 import CreateAccountScreen from "./CreateAccountScreen";
 import { GroupsPageScreen } from "./GroupPageScreen";
 import GroupSettingsScreen from "./GroupSettingsScreen";
+import { GroupCalanderScreen } from "./groupCalenderScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -79,6 +80,11 @@ function MainContainer() {
         <Stack.Screen
           name="GroupSettingsScreen"
           component={GroupSettingsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="GroupCalanderScreen"
+          component={GroupCalanderScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
