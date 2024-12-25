@@ -14,7 +14,7 @@ export async function getUser(uid) {
       return res.val();
     })
     .catch((err) => {
-      console.log("erroe");
+      console.log("get user", err);
     });
 }
 
@@ -24,7 +24,7 @@ export function getGroupsByUID(uid) {
       return res.val();
     })
     .catch((err) => {
-      console.log(err);
+      console.log("get groups by uid", err);
     });
 }
 
@@ -34,7 +34,7 @@ export async function getGroupByGroupId(id) {
       return res.val();
     })
     .catch((err) => {
-      console.log(err);
+      console.log("get group by id", err);
     });
 }
 
