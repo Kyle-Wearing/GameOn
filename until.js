@@ -58,6 +58,16 @@ export async function joinGroupById(group_id, uid, username) {
   });
 }
 
+export async function checkInGroup(group_id, uid) {
+  return get(ref(db, `groups/${group_id}/members/${uid}`))
+    .then((res) => {
+      return res.val();
+    })
+    .catch((err) => {
+      console.log("check in group", err);
+    });
+}
+
 export function updateGroupSettings(group_id, newName, members) {
   set(ref(db, `groups/${group_id}/groupName`), newName);
   members.forEach((member) => {

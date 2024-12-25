@@ -70,4 +70,8 @@ export const joinGroup = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+  },
 });
