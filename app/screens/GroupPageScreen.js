@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 import { getGroupByGroupId } from "../../until";
 import { groupPage } from "../styles/groupPage";
 import { View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -15,24 +15,26 @@ export function GroupsPageScreen({ route }) {
   const [name, setName] = useState("");
   const [members, setMembers] = useState([]);
 
-  useEffect(() => {
-    const getGroupData = async () => {
-      const group = await getGroupByGroupId(id);
-      const memberArr = [];
-      for (const member in group.members) {
-        memberArr.push({
-          uid: member,
-          username: group.members[member].username,
-          wins: group.members[member].wins,
-        });
-      }
-      setName(group.groupName);
-      memberArr.sort((a, b) => b.wins - a.wins);
-      setMembers(memberArr);
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const getGroupData = async () => {
+        const group = await getGroupByGroupId(id);
+        const memberArr = [];
+        for (const member in group.members) {
+          memberArr.push({
+            uid: member,
+            username: group.members[member].username,
+            wins: group.members[member].wins,
+          });
+        }
+        setName(group.groupName);
+        memberArr.sort((a, b) => b.wins - a.wins);
+        setMembers(memberArr);
+      };
 
-    getGroupData();
-  }, []);
+      getGroupData();
+    })
+  );
 
   return (
     <SafeAreaView>

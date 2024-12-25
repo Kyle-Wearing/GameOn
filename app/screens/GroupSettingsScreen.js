@@ -1,20 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-native";
 import { Text, SafeAreaView, TextInput } from "react-native";
 import { updateGroupSettings } from "../../until";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { groupSettings } from "../styles/groupSettingsPage";
+import { View } from "react-native";
+import * as Clipboard from "expo-clipboard";
 
 function GroupSettingsScreen({ route }) {
   const { groupName, groupMembers, group_id } = route.params;
-  console.log(groupMembers);
+  const navigation = useNavigation();
+  const [newName, setNewName] = useState("");
+  const [error, setError] = useState("");
+
+  function handleConfirm() {
+    if (newName) {
+      updateGroupSettings(group_id, newName, groupMembers);
+      navigation.goBack();
+    } else {
+      setError("must enter group name");
+    }
+  }
+
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(group_id);
+  };
+
   return (
     <SafeAreaView>
-      <Text>{groupName}</Text>
-      <Button
-        title="test"
+      <TouchableOpacity
+        style={groupSettings.backIcon}
         onPress={() => {
-          updateGroupSettings(group_id, "test update name", groupMembers);
+          navigation.goBack();
         }}
-      ></Button>
+      >
+        <Ionicons
+          name="chevron-back-outline"
+          size={30}
+          color="black"
+        ></Ionicons>
+      </TouchableOpacity>
+      <View style={groupSettings.inputContainer}>
+        <Text style={groupSettings.label}>Group Name:</Text>
+        <TextInput
+          style={groupSettings.input}
+          placeholder={groupName}
+          value={newName}
+          onChangeText={(text) => {
+            setNewName(text);
+            setError("");
+          }}
+          autoCapitalize="none"
+          autoCorrect={false}
+        ></TextInput>
+      </View>
+      {error ? <Text style={groupSettings.errorText}>{error}</Text> : null}
+      <View style={groupSettings.codeContainer}>
+        <Text>{group_id}</Text>
+        <TouchableOpacity
+          style={groupSettings.backIcon}
+          onPress={() => {
+            copyToClipboard();
+          }}
+        >
+          <Ionicons name="copy-outline" size={15} color="black"></Ionicons>
+        </TouchableOpacity>
+      </View>
+      <Button title="confirm changes" onPress={handleConfirm}></Button>
     </SafeAreaView>
   );
 }
