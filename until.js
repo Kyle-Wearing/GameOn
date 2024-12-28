@@ -18,7 +18,7 @@ export async function getUser(uid) {
     });
 }
 
-export function getGroupsByUID(uid) {
+export async function getGroupsByUID(uid) {
   return get(ref(db, `users/${uid}/groups`))
     .then((res) => {
       return res.val();
@@ -79,7 +79,7 @@ export function updateGroupSettings(group_id, newName, members) {
 
 export function updateGroupScores(uids, group_id) {
   uids.forEach((uid, index) => {
-    get(ref(db, `groups/${group_id}/members/${uid}`)).then((res) => {
+    get(ref(db, `groups/-${group_id}/members/${uid}`)).then((res) => {
       const inc = Number(res.val().wins) + 1;
       const scoreInc = Number(res.val().score) + uids.length - index - 1;
       if (index === 0) {
@@ -90,6 +90,11 @@ export function updateGroupScores(uids, group_id) {
   });
 }
 
-export function updateUsername(uid, username) {
+export async function updateUsername(uid, username) {
   set(ref(db, `users/${uid}/username`), username);
+  const groups = await getGroupsByUID(uid);
+  const groupIds = Object.keys(groups);
+  groupIds.forEach((group_id) => {
+    set(ref(db, `groups/${group_id}/members/${uid}/username`), username);
+  });
 }
