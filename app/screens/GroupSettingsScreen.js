@@ -14,10 +14,11 @@ function GroupSettingsScreen({ route }) {
   const navigation = useNavigation();
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
+  const id = group_id.slice(1);
 
   function handleConfirm() {
     if (newName) {
-      updateGroupSettings(group_id, newName, groupMembers);
+      updateGroupSettings(id, newName, groupMembers);
       navigation.goBack();
     } else {
       setError("must enter group name");
@@ -25,7 +26,7 @@ function GroupSettingsScreen({ route }) {
   }
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(group_id);
+    await Clipboard.setStringAsync(id);
   };
 
   return (
@@ -58,7 +59,7 @@ function GroupSettingsScreen({ route }) {
       </View>
       {error ? <Text style={groupSettings.errorText}>{error}</Text> : null}
       <View style={groupSettings.codeContainer}>
-        <Text>{group_id}</Text>
+        <Text>{id}</Text>
         <TouchableOpacity
           style={groupSettings.backIcon}
           onPress={() => {

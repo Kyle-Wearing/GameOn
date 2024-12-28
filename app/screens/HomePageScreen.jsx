@@ -4,12 +4,14 @@ import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getGroupsByUID } from "../../until";
 import { UserContext } from "../../userContext";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 function HomePageScreen() {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
   const navigate = useNavigation();
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     if (user.groups) {
@@ -24,7 +26,7 @@ function HomePageScreen() {
         setGroups(groupArr);
       });
     }
-  }, []);
+  }, [isFocused]);
 
   function handlePress(id) {
     navigate.navigate("GroupScreen", { id });

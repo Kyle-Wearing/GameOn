@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 import { getGroupByGroupId } from "../../until";
 import { groupPage } from "../styles/groupPage";
 import { View } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from "@react-navigation/native";
 import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -14,28 +18,27 @@ export function GroupsPageScreen({ route }) {
 
   const [name, setName] = useState("");
   const [members, setMembers] = useState([]);
+  const isFocused = useIsFocused();
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const getGroupData = async () => {
-        const group = await getGroupByGroupId(id);
-        const memberArr = [];
-        for (const member in group.members) {
-          memberArr.push({
-            uid: member,
-            username: group.members[member].username,
-            wins: group.members[member].wins,
-            score: group.members[member].score,
-          });
-        }
-        setName(group.groupName);
-        memberArr.sort((a, b) => b.score - a.score);
-        setMembers(memberArr);
-      };
+  useEffect(() => {
+    const getGroupData = async () => {
+      const group = await getGroupByGroupId(id.slice(1));
+      const memberArr = [];
+      for (const member in group.members) {
+        memberArr.push({
+          uid: member,
+          username: group.members[member].username,
+          wins: group.members[member].wins,
+          score: group.members[member].score,
+        });
+      }
+      setName(group.groupName);
+      memberArr.sort((a, b) => b.score - a.score);
+      setMembers(memberArr);
+    };
 
-      getGroupData();
-    })
-  );
+    getGroupData();
+  }, [isFocused]);
 
   return (
     <SafeAreaView>
