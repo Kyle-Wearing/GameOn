@@ -21,6 +21,8 @@ export function RecordScoresScreen({ route }) {
 
   function handleScores() {
     updateGroupScores(positions, id);
+    setScoresInput(false);
+    navigation.navigate("GroupScreen", { id });
   }
 
   function handlePress(uid) {
