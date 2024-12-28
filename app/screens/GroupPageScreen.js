@@ -100,19 +100,17 @@ export function GroupsPageScreen({ route }) {
           </TouchableOpacity>
         </View>
         <View style={groupPage.settings}>
-          <TouchableOpacity style={groupPage.button}>
-            <Text
-              style={groupPage.buttonText}
-              onPress={() => {
-                navigation.navigate("GroupSettingsScreen", {
-                  groupName: name,
-                  groupMembers: members,
-                  group_id: id,
-                });
-              }}
-            >
-              settings
-            </Text>
+          <TouchableOpacity
+            style={groupPage.button}
+            onPress={() => {
+              navigation.navigate("GroupSettingsScreen", {
+                groupName: name,
+                groupMembers: members,
+                group_id: id,
+              });
+            }}
+          >
+            <Text style={groupPage.buttonText}>settings</Text>
           </TouchableOpacity>
         </View>
         <View style={groupPage.calander}>
