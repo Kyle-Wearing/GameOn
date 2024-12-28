@@ -29,7 +29,7 @@ export function getGroupsByUID(uid) {
 }
 
 export async function getGroupByGroupId(id) {
-  return get(ref(db, `groups/${id}`))
+  return get(ref(db, `groups/-${id}`))
     .then((res) => {
       return res.val();
     })
@@ -49,10 +49,10 @@ export function createGroup(groupName) {
 
 export async function joinGroupById(group_id, uid, username) {
   const group = await getGroupByGroupId(group_id);
-  set(ref(db, `users/${uid}/groups/${group_id}`), {
+  set(ref(db, `users/${uid}/groups/-${group_id}`), {
     groupName: group.groupName,
   });
-  set(ref(db, `groups/${group_id}/members/${uid}`), {
+  set(ref(db, `groups/-${group_id}/members/${uid}`), {
     username,
     wins: 0,
     score: 0,
@@ -60,7 +60,7 @@ export async function joinGroupById(group_id, uid, username) {
 }
 
 export async function checkInGroup(group_id, uid) {
-  return get(ref(db, `groups/${group_id}/members/${uid}`))
+  return get(ref(db, `groups/-${group_id}/members/${uid}`))
     .then((res) => {
       return res.val();
     })
@@ -70,22 +70,27 @@ export async function checkInGroup(group_id, uid) {
 }
 
 export function updateGroupSettings(group_id, newName, members) {
-  set(ref(db, `groups/${group_id}/groupName`), newName);
+  set(ref(db, `groups/-${group_id}/groupName`), newName);
   members.forEach((member) => {
     const uid = member.uid;
-    set(ref(db, `users/${uid}/groups/${group_id}/groupName`), newName);
+    set(ref(db, `users/${uid}/groups/-${group_id}/groupName`), newName);
   });
 }
 
 export function updateGroupScores(uids, group_id) {
   uids.forEach((uid, index) => {
-    get(ref(db, `groups/${group_id}/members/${uid}`)).then((res) => {
+    get(ref(db, `groups/-${group_id}/members/${uid}`)).then((res) => {
+
       const inc = Number(res.val().wins) + 1;
       const scoreInc = Number(res.val().score) + uids.length - index - 1;
       if (index === 0) {
-        set(ref(db, `groups/${group_id}/members/${uid}/wins`), inc);
+        set(ref(db, `groups/-${group_id}/members/${uid}/wins`), inc);
       }
-      set(ref(db, `groups/${group_id}/members/${uid}/score`), scoreInc);
+      set(ref(db, `groups/-${group_id}/members/${uid}/score`), scoreInc);
     });
   });
+}
+
+export function updateUsername(uid, username) {
+  set(ref(db, `users/${uid}/username`), username);
 }

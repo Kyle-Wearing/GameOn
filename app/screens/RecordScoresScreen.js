@@ -7,6 +7,7 @@ import { Button } from "react-native";
 import { updateGroupScores } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native";
 
 export function RecordScoresScreen({ route }) {
   const { id, members, name } = route.params;
@@ -62,19 +63,23 @@ export function RecordScoresScreen({ route }) {
             <Text style={recordScores.scoreTitle}>
               Select players in order 1st to last
             </Text>
-            {membersArr.map((member, index) => {
-              return (
-                <View key={member.uid} style={recordScores.scoreInput}>
-                  <TouchableOpacity onPress={() => handlePress(member.uid)}>
-                    <Text style={recordScores.text}>{member.username}</Text>
+            <ScrollView style={recordScores.scrollContainer}>
+              {membersArr.map((member, index) => {
+                return (
+                  <TouchableOpacity
+                    style={recordScores.playerButton}
+                    onPress={() => handlePress(member.uid)}
+                  >
+                    <Text style={recordScores.playerText}>
+                      {member.username}
+                    </Text>
                   </TouchableOpacity>
-                </View>
-              );
-            })}
+                );
+              })}
+            </ScrollView>
             <Button
               title="reset"
               onPress={() => {
-                setPositions([]);
                 setMembersArr(members);
                 setPositions([]);
               }}
@@ -82,7 +87,11 @@ export function RecordScoresScreen({ route }) {
             <Button title="confirm scores" onPress={handleScores}></Button>
             <Button
               title="cancel"
-              onPress={() => setScoresInput(false)}
+              onPress={() => {
+                setMembersArr(members);
+                setPositions([]);
+                setScoresInput(false);
+              }}
             ></Button>
           </View>
         </View>

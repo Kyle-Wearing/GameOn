@@ -35,7 +35,6 @@ function JoinGroupScreen() {
         joinGroupById(joinCode, user.uid, user.username)
           .then(() => {
             setJoinVisible(false);
-            setUser((currUser) => {});
             navigation.navigate("GameOn", {
               screen: "Home",
             });
@@ -58,9 +57,10 @@ function JoinGroupScreen() {
         .then((code) => {
           const codeStr = code.toString();
           const group_id = codeStr.split("/")[4];
-          joinGroupById(group_id, user.uid, user.username);
-          navigation.navigate("GameOn", {
-            screen: "Home",
+          joinGroupById(group_id.slice(1), user.uid, user.username).then(() => {
+            navigation.navigate("GameOn", {
+              screen: "Home",
+            });
           });
         })
         .catch((err) => {

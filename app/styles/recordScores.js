@@ -63,16 +63,6 @@ export const recordScores = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  scoreInput: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  text: {
-    fontSize: 16,
-    color: "#333",
-    textAlign: "center",
-  },
   scoreTitle: {
     fontSize: 16,
     fontWeight: "bold",
@@ -94,5 +84,28 @@ export const recordScores = StyleSheet.create({
   },
   backIcon: {
     padding: 10,
+  },
+  scrollContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  playerButton: {
+    backgroundColor: "#fff",
+    marginBottom: 3,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "black",
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  playerText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#333",
   },
 });
