@@ -20,25 +20,27 @@ export function GroupsPageScreen({ route }) {
   const [members, setMembers] = useState([]);
   const isFocused = useIsFocused();
 
-  useEffect(() => {
-    const getGroupData = async () => {
-      const group = await getGroupByGroupId(id.slice(1));
-      const memberArr = [];
-      for (const member in group.members) {
-        memberArr.push({
-          uid: member,
-          username: group.members[member].username,
-          wins: group.members[member].wins,
-          score: group.members[member].score,
-        });
-      }
-      setName(group.groupName);
-      memberArr.sort((a, b) => b.score - a.score);
-      setMembers(memberArr);
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const getGroupData = async () => {
+        const group = await getGroupByGroupId(id.slice(1));
+        const memberArr = [];
+        for (const member in group.members) {
+          memberArr.push({
+            uid: member,
+            username: group.members[member].username,
+            wins: group.members[member].wins,
+            score: group.members[member].score,
+          });
+        }
+        setName(group.groupName);
+        memberArr.sort((a, b) => b.score - a.score);
+        setMembers(memberArr);
+      };
 
-    getGroupData();
-  }, [isFocused]);
+      getGroupData();
+    })
+  );
 
   return (
     <SafeAreaView>
@@ -46,7 +48,9 @@ export function GroupsPageScreen({ route }) {
         <TouchableOpacity
           style={groupPage.backIcon}
           onPress={() => {
-            navigation.goBack();
+            navigation.navigate("GameOn", {
+              screen: "home",
+            });
           }}
         >
           <Ionicons

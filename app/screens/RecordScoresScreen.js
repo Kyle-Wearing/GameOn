@@ -33,7 +33,7 @@ export function RecordScoresScreen({ route }) {
       })
     );
     setPositions((currPositions) => {
-      currPositions.unshift(uid);
+      currPositions.push(uid);
       return currPositions;
     });
   }
@@ -64,11 +64,12 @@ export function RecordScoresScreen({ route }) {
               Select players in order 1st to last
             </Text>
             <ScrollView style={recordScores.scrollContainer}>
-              {membersArr.map((member, index) => {
+              {membersArr.map((member) => {
                 return (
                   <TouchableOpacity
                     style={recordScores.playerButton}
                     onPress={() => handlePress(member.uid)}
+                    key={member.uid}
                   >
                     <Text style={recordScores.playerText}>
                       {member.username}
