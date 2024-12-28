@@ -46,7 +46,7 @@ function HomePageScreen() {
                   handlePress(group.group_id);
                 }}
               >
-                <Text style={homePage.groupText}>{group.groupName}</Text>
+                <Text style={styles.text}>{group.groupName}</Text>
               </TouchableOpacity>
             );
           })}
