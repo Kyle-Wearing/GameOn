@@ -1,7 +1,7 @@
 import { ref, set, get, push, update, child } from "firebase/database";
 import { db } from "./FirebaseConfig";
 
-export function postUser(uid, email, username) {
+export async function postUser(uid, email, username) {
   set(ref(db, `users/${uid}`), {
     email,
     username,
@@ -55,7 +55,18 @@ export async function joinGroupById(group_id, uid, username) {
   set(ref(db, `groups/${group_id}/members/${uid}`), {
     username,
     wins: 0,
+    score: 0,
   });
+}
+
+export async function checkInGroup(group_id, uid) {
+  return get(ref(db, `groups/${group_id}/members/${uid}`))
+    .then((res) => {
+      return res.val();
+    })
+    .catch((err) => {
+      console.log("check in group", err);
+    });
 }
 
 export function updateGroupSettings(group_id, newName, members) {
@@ -63,5 +74,18 @@ export function updateGroupSettings(group_id, newName, members) {
   members.forEach((member) => {
     const uid = member.uid;
     set(ref(db, `users/${uid}/groups/${group_id}/groupName`), newName);
+  });
+}
+
+export function updateGroupScores(uids, group_id) {
+  uids.forEach((uid, index) => {
+    get(ref(db, `groups/${group_id}/members/${uid}/wins`)).then((res) => {
+      const inc = Number(res.val()) + 1;
+      const scoreInc = uids.length - index + 1;
+      if (index === 0) {
+        set(ref(db, `groups/${group_id}/members/${uid}/wins`), inc);
+      }
+      set(ref(db, `groups/${group_id}/members/${uid}/score`), scoreInc);
+    });
   });
 }

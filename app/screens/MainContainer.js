@@ -4,7 +4,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
 import HomePageScreen from "./HomePageScreen";
 import UserPageScreen from "./UserPageScreen";
 import JoinGroupScreen from "./JoinGroupScreen";
@@ -12,6 +11,8 @@ import LoginScreen from "./LoginScreen";
 import CreateAccountScreen from "./CreateAccountScreen";
 import { GroupsPageScreen } from "./GroupPageScreen";
 import GroupSettingsScreen from "./GroupSettingsScreen";
+import { GroupCalanderScreen } from "./groupCalenderScreen";
+import { RecordScoresScreen } from "./RecordScoresScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -79,6 +80,16 @@ function MainContainer() {
         <Stack.Screen
           name="GroupSettingsScreen"
           component={GroupSettingsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="GroupCalanderScreen"
+          component={GroupCalanderScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecordScoresScreen"
+          component={RecordScoresScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

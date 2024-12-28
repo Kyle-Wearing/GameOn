@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { Text, StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getGroupsByUID } from "../../until";
 import { UserContext } from "../../userContext";
@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 function HomePageScreen() {
   const { user } = useContext(UserContext);
   const [groups, setGroups] = useState([]);
-  const navigation = useNavigation();
+  const navigate = useNavigation();
 
   useEffect(() => {
     if (user.groups) {
@@ -24,10 +24,10 @@ function HomePageScreen() {
         setGroups(groupArr);
       });
     }
-  }, [groups]);
+  }, []);
 
   function handlePress(id) {
-    navigation.navigate("GroupScreen", { id });
+    navigate.navigate("GroupScreen", { id });
   }
 
   return (

@@ -1,25 +1,14 @@
 import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
-export const joinGroup = StyleSheet.create({
+export const recordScores = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  input: {
-    height: 50,
-    width: "100%",
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: "#ccc",
-    padding: 15,
-    fontSize: 16,
-    backgroundColor: "#fff",
-    flexDirection: "row",
-  },
   modalView: {
-    width: width * 0.7,
+    width: width * 0.75,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 25,
@@ -37,23 +26,25 @@ export const joinGroup = StyleSheet.create({
     borderRadius: 15,
     borderColor: "",
   },
+  input: {
+    height: 50,
+    width: width * 0.5,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "#ccc",
+    padding: 15,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+  },
   container: {
-    flex: 1,
+    marginTop: height * 0.35,
     alignItems: "center",
     justifyContent: "center",
   },
   textContainer: {
     marginBottom: 20,
     alignItems: "center",
-  },
-  text: {
-    fontSize: 25,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#333",
-    textAlign: "center",
-    marginLeft: width * 0.1,
-    marginRight: width * 0.1,
   },
   button: {
     backgroundColor: "#007bff",
@@ -72,8 +63,36 @@ export const joinGroup = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  errorText: {
-    color: "red",
+  scoreInput: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
+  text: {
+    fontSize: 16,
+    color: "#333",
     textAlign: "center",
+  },
+  scoreTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    padding: 10,
+  },
+  header: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  title: {
+    position: "absolute",
+    left: "50%",
+    transform: [{ translateX: "-50%" }],
+  },
+  titleText: {
+    fontSize: 25,
+    textAlign: "center",
+  },
+  backIcon: {
+    padding: 10,
   },
 });
