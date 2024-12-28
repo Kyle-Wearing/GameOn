@@ -25,10 +25,11 @@ export function GroupsPageScreen({ route }) {
             uid: member,
             username: group.members[member].username,
             wins: group.members[member].wins,
+            score: group.members[member].score,
           });
         }
         setName(group.groupName);
-        memberArr.sort((a, b) => b.wins - a.wins);
+        memberArr.sort((a, b) => b.score - a.score);
         setMembers(memberArr);
       };
 
@@ -60,9 +61,26 @@ export function GroupsPageScreen({ route }) {
           <ScrollView>
             {members.map((member, index) => {
               return (
-                <Text key={member.uid}>
-                  {index + 1}: {member.username} wins: {member.wins}
-                </Text>
+                <View
+                  key={member.uid}
+                  style={
+                    index === 0
+                      ? groupPage.memberCard0
+                      : index === 1
+                      ? groupPage.memberCard1
+                      : index === 2
+                      ? groupPage.memberCard2
+                      : groupPage.memberCard
+                  }
+                >
+                  <Text style={groupPage.username}>
+                    {index + 1}: {member.username}
+                  </Text>
+                  <View style={groupPage.statsContainer}>
+                    <Text style={groupPage.score}>score: {member.score}</Text>
+                    <Text style={groupPage.score}>wins: {member.wins}</Text>
+                  </View>
+                </View>
               );
             })}
           </ScrollView>
@@ -96,7 +114,9 @@ export function GroupsPageScreen({ route }) {
         <View style={groupPage.calander}>
           <TouchableOpacity
             style={groupPage.button}
-            onPress={() => navigation.navigate("GroupCalanderScreen")}
+            onPress={() =>
+              navigation.navigate("GroupCalanderScreen", { id, members, name })
+            }
           >
             <Text style={groupPage.buttonText}>calander</Text>
           </TouchableOpacity>
