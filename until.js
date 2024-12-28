@@ -80,6 +80,7 @@ export function updateGroupSettings(group_id, newName, members) {
 export function updateGroupScores(uids, group_id) {
   uids.forEach((uid, index) => {
     get(ref(db, `groups/-${group_id}/members/${uid}`)).then((res) => {
+
       const inc = Number(res.val().wins) + 1;
       const scoreInc = Number(res.val().score) + uids.length - index - 1;
       if (index === 0) {

@@ -22,8 +22,8 @@ import { UserContext } from "../../userContext";
 function LoginScreen() {
   //"test@test.com"
   //"123456"
-  const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const refPasswordInput = useRef(null);
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
