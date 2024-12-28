@@ -12,7 +12,7 @@ function JoinGroupScreen() {
   const [createVisible, setCreateVisible] = useState(false);
   const [joinCode, setJoinCode] = useState("");
   const [groupName, setGroupName] = useState("");
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [error, setError] = useState("");
   const navigation = useNavigation();
 
@@ -35,6 +35,7 @@ function JoinGroupScreen() {
         joinGroupById(joinCode, user.uid, user.username)
           .then(() => {
             setJoinVisible(false);
+            setUser((currUser) => {});
             navigation.navigate("GameOn", {
               screen: "Home",
             });

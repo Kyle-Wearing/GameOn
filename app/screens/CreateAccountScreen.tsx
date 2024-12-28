@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import {
   View,
   TextInput,
@@ -11,11 +11,12 @@ import {
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import { postUser } from "../../until";
+import { getUser, postUser } from "../../until";
 import { auth } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
 import { loginStyle } from "../styles/loginPage";
+import { UserContext } from "../../userContext";
 
 function CreateAccountScreen() {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ function CreateAccountScreen() {
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState("");
+  const { setUser } = useContext(UserContext);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -60,7 +62,9 @@ function CreateAccountScreen() {
           );
           setLoading(false);
           if (user) {
-            postUser(user.user.uid, email, username);
+            await postUser(user.user.uid, email, username);
+            const newUser = await getUser(user.user.uid);
+            setUser({ ...newUser, uid: user.user.uid });
             navigation.navigate("GameOn");
           }
         } catch (error: any) {

@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, SafeAreaView, Image, Alert, Button } from "react-native";
+import { UserContext } from "../../userContext";
+import { useNavigation } from "@react-navigation/native";
 
-function UserPageScreen({ navigation }) {
+function UserPageScreen() {
+  const { user, setUser } = useContext(UserContext);
+  const navigation = useNavigation();
+
+  function logOut() {
+    setUser({});
+    navigation.navigate("LogIn");
+  }
   return (
     <SafeAreaView>
       <Text>Profile Page</Text>
@@ -11,6 +20,7 @@ function UserPageScreen({ navigation }) {
         onPress={() => Alert.alert("edit account details")}
         title="Edit Account"
       ></Button>
+      <Button title="log out" onPress={logOut}></Button>
     </SafeAreaView>
   );
 }
