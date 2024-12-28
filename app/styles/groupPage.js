@@ -116,4 +116,9 @@ export const groupPage = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  leaderboardText: {
+    textAlign: "center",
+    marginTop: -13,
+    marginBottom: 5,
+  },
 });

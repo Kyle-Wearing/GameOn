@@ -61,6 +61,7 @@ export function GroupsPageScreen({ route }) {
       </View>
       <View style={groupPage.container}>
         <View style={groupPage.leaderboard}>
+          <Text style={groupPage.leaderboardText}>leaderboard</Text>
           <ScrollView>
             {members.map((member, index) => {
               return (

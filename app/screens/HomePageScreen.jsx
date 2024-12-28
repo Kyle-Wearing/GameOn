@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity } from "react-native";
-import { Text, View, StyleSheet } from "react-native";
+import { Text } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getGroupsByUID } from "../../until";
 import { UserContext } from "../../userContext";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { homePage } from "../styles/homePage";
 
 function HomePageScreen() {
   const { user } = useContext(UserContext);
@@ -34,17 +35,18 @@ function HomePageScreen() {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
+      <SafeAreaView style={homePage.container}>
+        <ScrollView style={homePage.scrollContainer}>
           {groups.map((group) => {
             return (
               <TouchableOpacity
                 key={group.group_id}
+                style={homePage.groupButton}
                 onPress={() => {
                   handlePress(group.group_id);
                 }}
               >
-                <Text style={styles.text}>{group.groupName}</Text>
+                <Text style={homePage.groupText}>{group.groupName}</Text>
               </TouchableOpacity>
             );
           })}
@@ -53,20 +55,5 @@ function HomePageScreen() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-between",
-    padding: 10,
-    margin: 10,
-  },
-  text: {
-    fontSize: 40,
-  },
-  topScores: {
-    fontSize: 20,
-  },
-});
 
 export default HomePageScreen;
