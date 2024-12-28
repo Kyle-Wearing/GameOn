@@ -42,7 +42,7 @@ function HomePageScreen() {
                   handlePress(group.group_id);
                 }}
               >
-                <Text>{group.groupName}</Text>
+                <Text style={styles.text}>{group.groupName}</Text>
               </TouchableOpacity>
             );
           })}
