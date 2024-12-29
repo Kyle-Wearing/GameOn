@@ -48,9 +48,7 @@ export function GroupsPageScreen({ route }) {
         <TouchableOpacity
           style={groupPage.backIcon}
           onPress={() => {
-            navigation.navigate("GameOn", {
-              screen: "home",
-            });
+            navigation.goBack();
           }}
         >
           <Ionicons

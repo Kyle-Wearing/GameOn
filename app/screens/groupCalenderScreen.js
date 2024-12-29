@@ -20,7 +20,7 @@ export function GroupCalanderScreen({ route }) {
         <TouchableOpacity
           style={groupCalander.backIcon}
           onPress={() => {
-            navigation.goBack();
+            navigation.pop();
           }}
         >
           <Ionicons

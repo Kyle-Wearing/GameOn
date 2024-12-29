@@ -23,7 +23,7 @@ export function RecordScoresScreen({ route }) {
   function handleScores() {
     updateGroupScores(positions, id);
     setScoresInput(false);
-    navigation.navigate("GroupScreen", { id });
+    navigation.pop(2);
   }
 
   function handlePress(uid) {
@@ -44,7 +44,7 @@ export function RecordScoresScreen({ route }) {
         <TouchableOpacity
           style={recordScores.backIcon}
           onPress={() => {
-            navigation.goBack();
+            navigation.pop();
           }}
         >
           <Ionicons
