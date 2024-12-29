@@ -3,7 +3,7 @@ import { TouchableOpacity, View } from "react-native";
 import { Modal } from "react-native";
 import { Text, SafeAreaView, TextInput, Button } from "react-native";
 import { joinGroup } from "../styles/joinGroup";
-import { checkInGroup, createGroup, joinGroupById } from "../../until";
+import { checkInGroup, createGroup, getUser, joinGroupById } from "../../until";
 import { UserContext } from "../../userContext";
 import { useNavigation } from "@react-navigation/native";
 
