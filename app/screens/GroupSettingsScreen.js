@@ -19,7 +19,7 @@ function GroupSettingsScreen({ route }) {
   function handleConfirm() {
     if (newName) {
       updateGroupSettings(id, newName, groupMembers);
-      navigation.goBack();
+      navigation.pop();
     } else {
       setError("must enter group name");
     }
