@@ -1,4 +1,4 @@
-import { ref, set, get, push, update, child } from "firebase/database";
+import { ref, set, get, push, update, child, remove } from "firebase/database";
 import { db } from "./FirebaseConfig";
 
 export async function postUser(uid, email, username) {
@@ -97,4 +97,9 @@ export async function updateUsername(uid, username) {
   groupIds.forEach((group_id) => {
     set(ref(db, `groups/${group_id}/members/${uid}/username`), username);
   });
+}
+
+export function leaveGroup(uid, group_id) {
+  remove(ref(db, `groups/${group_id}/members/${uid}`));
+  remove(ref(db, `users/${uid}/groups/${group_id}`));
 }

@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Button } from "react-native";
 import { Text, SafeAreaView, TextInput } from "react-native";
-import { updateGroupSettings } from "../../until";
+import { leaveGroup, updateGroupSettings } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { groupSettings } from "../styles/groupSettingsPage";
 import { View } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import { UserContext } from "../../userContext";
 
 function GroupSettingsScreen({ route }) {
   const { groupName, groupMembers, group_id } = route.params;
@@ -15,6 +16,7 @@ function GroupSettingsScreen({ route }) {
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
   const id = group_id.slice(1);
+  const { user } = useContext(UserContext);
 
   function handleConfirm() {
     if (newName) {
@@ -23,6 +25,11 @@ function GroupSettingsScreen({ route }) {
     } else {
       setError("must enter group name");
     }
+  }
+
+  function handleLeave() {
+    leaveGroup(user.uid, group_id);
+    navigation.pop(2);
   }
 
   const copyToClipboard = async () => {
@@ -70,6 +77,7 @@ function GroupSettingsScreen({ route }) {
         </TouchableOpacity>
       </View>
       <Button title="confirm changes" onPress={handleConfirm}></Button>
+      <Button title="leave group" onPress={handleLeave}></Button>
     </SafeAreaView>
   );
 }
