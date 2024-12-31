@@ -7,6 +7,7 @@ import { View } from "react-native";
 import { userSettings } from "../styles/userSettings";
 import { TextInput } from "react-native";
 import { updateUsername } from "../../until";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function UserPageScreen() {
   const { user, setUser } = useContext(UserContext);
@@ -16,9 +17,20 @@ function UserPageScreen() {
   const [error, setError] = useState("");
 
   function logOut() {
+    _removeData();
     setUser({});
+
     navigation.navigate("LogIn");
   }
+
+  const _removeData = async () => {
+    try {
+      await AsyncStorage.removeItem("USERID");
+      await AsyncStorage.removeItem("USERNAME");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   function handleConfirm() {
     if (username) {
