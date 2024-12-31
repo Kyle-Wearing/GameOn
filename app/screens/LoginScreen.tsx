@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   View,
   TextInput,
@@ -8,6 +8,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { loginStyle } from "../styles/loginPage";
 import { getUser } from "../../until";
@@ -28,8 +30,12 @@ function LoginScreen() {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    _fetchData();
+  }, [user.uid]);
 
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
@@ -42,7 +48,8 @@ function LoginScreen() {
       setLoading(false);
       if (user) {
         const newUser = await getUser(user.user.uid);
-        setUser({ ...newUser, uid: user.user.uid });
+        _saveData(user.user.uid, newUser.username);
+        setUser({ uid: user.user.uid, username: newUser.username });
         navigation.navigate("GameOn");
       }
     } catch (error: any) {
@@ -53,6 +60,29 @@ function LoginScreen() {
         .split("-")
         .join(" ");
       setError(errorMsg);
+    }
+  };
+
+  const _saveData = async (uid: string, username: string) => {
+    try {
+      await AsyncStorage.setItem("USERID", uid);
+      await AsyncStorage.setItem("USERNAME", username);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const _fetchData = async () => {
+    try {
+      const fetchedUserUid = await AsyncStorage.getItem("USERID");
+      const fetchedUserName = await AsyncStorage.getItem("USERNAME");
+      if (fetchedUserUid && fetchedUserName) {
+        setUser({ uid: fetchedUserUid, username: fetchedUserName });
+        navigation.navigate("GameOn");
+      }
+    } catch (err) {
+      console.log(err);
+      navigation.navigate("LogIn");
     }
   };
 
