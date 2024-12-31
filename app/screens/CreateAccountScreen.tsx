@@ -64,7 +64,7 @@ function CreateAccountScreen() {
           if (user) {
             await postUser(user.user.uid, email, username);
             const newUser = await getUser(user.user.uid);
-            setUser({ ...newUser, uid: user.user.uid });
+            setUser({ uid: user.user.uid, username: newUser.username });
             navigation.navigate("GameOn");
           }
         } catch (error: any) {
