@@ -1,4 +1,5 @@
 import { StyleSheet, Dimensions } from "react-native";
+import { SearchBar } from "react-native-screens";
 const { width, height } = Dimensions.get("window");
 
 export const homePage = StyleSheet.create({
@@ -27,5 +28,28 @@ export const homePage = StyleSheet.create({
     fontWeight: "500",
     color: "#333",
     textAlign: "center",
+  },
+  titleText: {
+    fontSize: 24,
+    padding: 5,
+  },
+  input: {
+    height: 50,
+    width: width * 0.7,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "#ccc",
+    paddingLeft: 15,
+    fontSize: 16,
+    backgroundColor: "#fff",
+    marginBottom: 16,
+    flexDirection: "row",
+  },
+  iconButton: {
+    justifyContent: "center",
+    padding: 10,
+  },
+  searchBar: {
+    alignItems: "center",
   },
 });
