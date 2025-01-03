@@ -23,10 +23,10 @@ function CreateAccountScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassowrd] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const refPasswordInput = useRef(null);
-  const refConfirmPasswordInput = useRef(null);
-  const refEmailInput = useRef(null);
-  const navigation = useNavigation();
+  const refPasswordInput: any = useRef(null);
+  const refConfirmPasswordInput: any = useRef(null);
+  const refEmailInput: any = useRef(null);
+  const navigation: any = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const [error, setError] = useState("");
