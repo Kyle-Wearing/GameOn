@@ -13,6 +13,7 @@ import { GroupsPageScreen } from "./GroupPageScreen";
 import GroupSettingsScreen from "./GroupSettingsScreen";
 import { GroupCalanderScreen } from "./groupCalenderScreen";
 import { RecordScoresScreen } from "./RecordScoresScreen";
+import { LoadingScreen } from "./LoadingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,7 +57,12 @@ const NavTab = () => {
 function MainContainer() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LogIn">
+      <Stack.Navigator initialRouteName="LoadingScreen">
+        <Stack.Screen
+          name="LoadingScreen"
+          component={LoadingScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="LogIn"
           component={LoginScreen}

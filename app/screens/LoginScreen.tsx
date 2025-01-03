@@ -33,10 +33,6 @@ function LoginScreen() {
   const { user, setUser } = useContext(UserContext);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    _fetchData();
-  }, [user.uid]);
-
   const focusOnPassword = () => {
     refPasswordInput?.current?.focus();
   };
@@ -69,20 +65,6 @@ function LoginScreen() {
       await AsyncStorage.setItem("USERNAME", username);
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const _fetchData = async () => {
-    try {
-      const fetchedUserUid = await AsyncStorage.getItem("USERID");
-      const fetchedUserName = await AsyncStorage.getItem("USERNAME");
-      if (fetchedUserUid && fetchedUserName) {
-        setUser({ uid: fetchedUserUid, username: fetchedUserName });
-        navigation.navigate("GameOn");
-      }
-    } catch (err) {
-      console.log(err);
-      navigation.navigate("LogIn");
     }
   };
 
