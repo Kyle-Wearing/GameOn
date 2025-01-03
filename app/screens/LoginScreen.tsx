@@ -24,10 +24,10 @@ import { UserContext } from "../../userContext";
 function LoginScreen() {
   //"test@test.com"
   //"123456"
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const refPasswordInput = useRef(null);
-  const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const refPasswordInput: any = useRef(null);
+  const navigation: any = useNavigation();
   const [loading, setLoading] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
   const { user, setUser } = useContext(UserContext);
