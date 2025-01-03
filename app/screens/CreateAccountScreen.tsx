@@ -9,6 +9,8 @@ import {
   Text,
 } from "react-native";
 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { getUser, postUser } from "../../until";
@@ -64,6 +66,7 @@ function CreateAccountScreen() {
           if (user) {
             await postUser(user.user.uid, email, username);
             const newUser = await getUser(user.user.uid);
+            _saveData(user.user.uid, newUser.username);
             setUser({ uid: user.user.uid, username: newUser.username });
             navigation.navigate("GameOn");
           }
@@ -82,6 +85,15 @@ function CreateAccountScreen() {
       }
     } else {
       setError("must enter a username");
+    }
+  };
+
+  const _saveData = async (uid: string, username: string) => {
+    try {
+      await AsyncStorage.setItem("USERID", uid);
+      await AsyncStorage.setItem("USERNAME", username);
+    } catch (err) {
+      console.log(err);
     }
   };
 
