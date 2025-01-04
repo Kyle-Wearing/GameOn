@@ -88,10 +88,13 @@ export const recordScores = StyleSheet.create({
   scrollContainer: {
     paddingVertical: 10,
     paddingHorizontal: 16,
+    maxHeight: height * 0.8,
   },
   playerButton: {
+    marginLeft: width * 0.1,
+    marginRight: width * 0.1,
     backgroundColor: "#fff",
-    marginBottom: 3,
+    marginBottom: 5,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: "black",
@@ -107,5 +110,6 @@ export const recordScores = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#333",
+    textAlign: "center",
   },
 });

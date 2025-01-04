@@ -45,8 +45,8 @@ function HomePageScreen() {
   useEffect(() => {
     if (search) {
       const filteredGroups = fullGroups.filter((group) => {
-        const groupName = group.groupName.trim();
-        return groupName.includes(search.trim());
+        const groupName = group.groupName.trim().toLowerCase();
+        return groupName.includes(search.trim().toLowerCase());
       });
       if (filteredGroups.length) {
         setGroups(filteredGroups);

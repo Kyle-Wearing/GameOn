@@ -91,7 +91,6 @@ export function RecordScoresScreen({ route }) {
               value={scoreInput}
               onChangeText={setScoreInput}
             ></TextInput>
-
             <Button title="confirm" onPress={handleConfirm}></Button>
             <Button
               title="cancel"
@@ -106,20 +105,20 @@ export function RecordScoresScreen({ route }) {
         </View>
       </Modal>
       <View>
-        <ScrollView>
+        <ScrollView style={recordScores.scrollContainer}>
           {memberArr.map((member) => {
             return (
-              <View key={member.uid}>
-                <TouchableOpacity
-                  onPress={() => {
-                    handlePress(member.uid, member.username);
-                  }}
-                >
-                  <Text>
-                    {member.username}: {member.score}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                key={member.uid}
+                style={recordScores.playerButton}
+                onPress={() => {
+                  handlePress(member.uid, member.username);
+                }}
+              >
+                <Text style={recordScores.playerText}>
+                  {member.username}: {member.score}
+                </Text>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
