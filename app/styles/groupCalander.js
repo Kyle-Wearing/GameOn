@@ -2,7 +2,9 @@ import { StyleSheet, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const groupCalander = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+  },
   header: {
     display: "flex",
     flexDirection: "row",
