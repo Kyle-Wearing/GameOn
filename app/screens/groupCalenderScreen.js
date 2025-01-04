@@ -5,6 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
+import { useState } from "react";
+import { Calendar, CalendarList, Agenda } from "react-native-calendars";
 
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
@@ -13,6 +15,8 @@ export function GroupCalanderScreen({ route }) {
   function handleScore() {
     navigation.navigate("RecordScoresScreen", { id, members, name });
   }
+
+  const [selected, setSelected] = useState("");
 
   return (
     <SafeAreaView style={groupCalander.container}>
@@ -33,6 +37,33 @@ export function GroupCalanderScreen({ route }) {
           <Text style={groupCalander.titleText}>{name}</Text>
         </View>
       </View>
+      <SafeAreaView>
+        <View>
+          <Calendar
+            style={groupCalander.calendar}
+            theme={{
+              backgroundColor: "#ffffff",
+              calendarBackground: "#ffffff",
+              textSectionTitleColor: "#b6c1cd",
+              selectedDayBackgroundColor: "#00adf5",
+              selectedDayTextColor: "#ffffff",
+              todayTextColor: "#00adf5",
+              dayTextColor: "#2d4150",
+              textDisabledColor: "#dd99ee",
+            }}
+            onDayPress={(day) => {
+              setSelected(day.dateString);
+            }}
+            markedDates={{
+              [selected]: {
+                selected: true,
+                disableTouchEvent: true,
+                selectedDotColor: "orange",
+              },
+            }}
+          />
+        </View>
+      </SafeAreaView>
       <View style={groupCalander.button}>
         <Button title={"record scores"} onPress={handleScore}></Button>
       </View>
