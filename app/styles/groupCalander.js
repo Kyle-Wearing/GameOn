@@ -21,6 +21,11 @@ export const groupCalander = StyleSheet.create({
     padding: 10,
   },
   button: {
-    marginTop: height * 0.35,
+    flex: 1,
+  },
+  calendar: {
+    borderWidth: 1,
+    borderColor: "gray",
+    height: 350,
   },
 });
