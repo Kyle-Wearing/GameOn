@@ -30,6 +30,12 @@
           <string>com.anonymous.GameOn</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.googleusercontent.apps.894240099658-a418se5262al9a2j556diooot930p3la</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>1</string>
