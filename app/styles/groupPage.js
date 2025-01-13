@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform, StatusBar } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const groupPage = StyleSheet.create({
@@ -121,4 +121,8 @@ export const groupPage = StyleSheet.create({
     marginTop: -13,
     marginBottom: 5,
   },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+  }
 });

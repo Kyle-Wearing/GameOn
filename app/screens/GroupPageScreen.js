@@ -44,7 +44,7 @@ export function GroupsPageScreen({ route }) {
   );
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider style={groupPage.AndroidSafeArea}>
       <SafeAreaView>
         <View style={groupPage.header}>
           <TouchableOpacity

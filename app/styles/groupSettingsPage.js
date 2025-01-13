@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform, StatusBar } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const groupSettings = StyleSheet.create({
@@ -34,4 +34,8 @@ export const groupSettings = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+  }
 });

@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform, StatusBar } from "react-native";
 const { width, height } = Dimensions.get("window");
 
 export const recordScores = StyleSheet.create({
@@ -112,4 +112,8 @@ export const recordScores = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
+  AndroidSafeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+  }
 });

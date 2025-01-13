@@ -59,7 +59,7 @@ export function RecordScoresScreen({ route }) {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={recordScores.AndroidSafeArea}>
       <View style={recordScores.header}>
         <TouchableOpacity
           style={recordScores.backIcon}

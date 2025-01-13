@@ -37,7 +37,7 @@ function GroupSettingsScreen({ route }) {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={groupSettings.AndroidSafeArea}>
       <TouchableOpacity
         style={groupSettings.backIcon}
         onPress={() => {
