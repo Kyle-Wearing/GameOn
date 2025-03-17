@@ -4,7 +4,7 @@ const { width, height } = Dimensions.get("window");
 export const groupCalander = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight: 0
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
   header: {
     display: "flex",
@@ -28,7 +28,7 @@ export const groupCalander = StyleSheet.create({
   },
   calendar: {
     borderWidth: 1,
-    borderColor: "gray",
-    height: 350,
+    borderColor: "black",
+    height: 355,
   },
 });

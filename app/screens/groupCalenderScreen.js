@@ -4,7 +4,7 @@ import { Button, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useState } from "react";
-import { Calendar } from "react-native-calendars";
+import { Calendar, Agenda } from "react-native-calendars";
 
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
@@ -12,10 +12,6 @@ export function GroupCalanderScreen({ route }) {
 
   function handleScore() {
     navigation.navigate("RecordScoresScreen", { id, members, name });
-  }
-
-  function scheduleGame() {
-    navigation.navigate("ScheduleGameScreen", { name });
   }
 
   const [selected, setSelected] = useState("");
@@ -67,8 +63,7 @@ export function GroupCalanderScreen({ route }) {
         </View>
       </SafeAreaView>
       <View style={groupCalander.button}>
-        <Button title={"record scores"} onPress={handleScore}/>
-        <Button title={"schedule game"} onPress={scheduleGame}/>
+        <Button title={"record scores"} onPress={handleScore} />
       </View>
     </SafeAreaView>
   );
