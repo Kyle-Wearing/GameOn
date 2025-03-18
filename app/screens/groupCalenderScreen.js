@@ -3,7 +3,7 @@ import { groupCalander } from "../styles/groupCalander";
 import { Button, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Agenda } from "react-native-calendars";
 
 export function GroupCalanderScreen({ route }) {
@@ -14,7 +14,35 @@ export function GroupCalanderScreen({ route }) {
     navigation.navigate("RecordScoresScreen", { id, members, name });
   }
 
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(getTodaysDate());
+  const [selectedDates, setSelectedDates] = useState({});
+
+  const dot = { key: "workout", color: "blue", selectedDotColor: "white" };
+  function getTodaysDate() {
+    return new Date().toLocaleDateString().split("/").reverse().join("-");
+  }
+
+  useEffect(() => {
+    const daySelected = {
+      [selected]: {
+        selected: true,
+        disableTouchEvent: true,
+        selectedDotColor: "white",
+      },
+    };
+    const apiCall = [
+      {
+        "2025-03-25": { dots: [dot] },
+      },
+    ];
+    apiCall.forEach((date) => {
+      if (Object.keys(date)[0] === selected) {
+        Object.values(date)[0].selected = true;
+      }
+      daySelected[Object.keys(date)[0]] = Object.values(date)[0];
+    });
+    setSelectedDates(daySelected);
+  }, [selected]);
 
   return (
     <SafeAreaView style={groupCalander.container}>
@@ -52,13 +80,9 @@ export function GroupCalanderScreen({ route }) {
             onDayPress={(day) => {
               setSelected(day.dateString);
             }}
-            markedDates={{
-              [selected]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedDotColor: "orange",
-              },
-            }}
+            enableSwipeMonths={true}
+            markingType={"multi-dot"}
+            markedDates={selectedDates}
           />
         </View>
       </SafeAreaView>
