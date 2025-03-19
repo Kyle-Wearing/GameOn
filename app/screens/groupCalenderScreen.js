@@ -1,11 +1,11 @@
-import { SafeAreaView, ScrollView, Text } from "react-native";
+import { Modal, SafeAreaView, ScrollView, Text, TextInput } from "react-native";
 import { groupCalander } from "../styles/groupCalander";
 import { Button, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
-import { Calendar, Agenda } from "react-native-calendars";
-import { getGroupCalendar, getGroupCalendarDate } from "../../until";
+import { Calendar } from "react-native-calendars";
+import { getGroupCalendar, sheduleGame } from "../../until";
 
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
@@ -15,11 +15,25 @@ export function GroupCalanderScreen({ route }) {
     navigation.navigate("RecordScoresScreen", { id, members, name, selected });
   }
 
-  function handleAddGame() {}
+  async function handleAddGame() {
+    if (gameInput) {
+      console.log("here first");
+      await sheduleGame(id, selected, gameInput);
+      setAddGameVisible(false);
+      setGameInput("");
+      setRefresh(refresh * -1);
+    } else {
+      setError("Must Enter Game");
+    }
+  }
 
   const [selected, setSelected] = useState(getTodaysDate());
   const [selectedDates, setSelectedDates] = useState({});
   const [savedGames, setSavedGames] = useState([]);
+  const [addGameVisibile, setAddGameVisible] = useState(false);
+  const [gameInput, setGameInput] = useState("");
+  const [error, setError] = useState("");
+  const [refresh, setRefresh] = useState(1);
 
   const dot = { color: "blue", selectedDotColor: "white" };
   function getTodaysDate() {
@@ -40,19 +54,19 @@ export function GroupCalanderScreen({ route }) {
         res = [];
       }
       setSavedGames([]);
-      const games = [];
+      const games = {};
       Object.entries(res).forEach((date) => {
-        games.push(date[1]);
+        games[date[0]] = date[1];
         daySelected[date[0]] = { dots: [dot] };
         if (date[0] === selected) {
           daySelected[date[0]].selected = true;
-          setSavedGames(games.flat());
+          setSavedGames(games);
         }
       });
 
       setSelectedDates(daySelected);
     });
-  }, [selected]);
+  }, [selected, refresh]);
 
   return (
     <SafeAreaView style={groupCalander.container}>
@@ -74,6 +88,39 @@ export function GroupCalanderScreen({ route }) {
         </View>
       </View>
       <SafeAreaView>
+        <Modal
+          animationType="none"
+          transparent={true}
+          visible={addGameVisibile}
+        >
+          <View style={groupCalander.centeredView}>
+            <View style={groupCalander.modalView}>
+              <Text>Enter Name Of Game</Text>
+              <TextInput
+                style={groupCalander.input}
+                value={gameInput}
+                onChangeText={(text) => {
+                  setGameInput(text);
+                  setError("");
+                }}
+                returnKeyType="done"
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {error ? (
+                <Text style={groupCalander.errorText}>{error}</Text>
+              ) : null}
+              <Button title="Add Game" onPress={handleAddGame}></Button>
+              <Button
+                title="Cancel"
+                onPress={() => {
+                  setAddGameVisible(false);
+                  setGameInput("");
+                }}
+              ></Button>
+            </View>
+          </View>
+        </Modal>
         <View>
           <Calendar
             style={groupCalander.calendar}
@@ -98,18 +145,25 @@ export function GroupCalanderScreen({ route }) {
       </SafeAreaView>
       <View style={groupCalander.button}>
         <Button title={"record scores"} onPress={handleScore} />
-        <Button title={"Add Game"} onPress={handleAddGame} />
+        <Button
+          title={"Add Game"}
+          onPress={() => {
+            setAddGameVisible(true);
+          }}
+        />
       </View>
       <Text style={groupCalander.dateText}>
         {selected.split("-").reverse().join(" / ")}
       </Text>
       <ScrollView style={groupCalander.eventList}>
-        {savedGames.length ? (
-          savedGames.map((game) => (
-            <View key={game} style={groupCalander.eventItem}>
-              <Text style={groupCalander.eventTitle}>{game}</Text>
-            </View>
-          ))
+        {savedGames[selected] ? (
+          savedGames[selected].map((game, index) => {
+            return (
+              <View key={index} style={groupCalander.eventItem}>
+                <Text style={groupCalander.eventTitle}>{game}</Text>
+              </View>
+            );
+          })
         ) : (
           <View style={groupCalander.eventItem}>
             <Text style={groupCalander.eventTitle}>No Games Sheduled</Text>

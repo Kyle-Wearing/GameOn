@@ -1,5 +1,6 @@
 import { ref, set, get, push, update, child, remove } from "firebase/database";
 import { db } from "./FirebaseConfig";
+import { Calendar } from "react-native-calendars";
 
 export async function postUser(uid, email, username) {
   set(ref(db, `users/${uid}`), {
@@ -107,9 +108,19 @@ export function leaveGroup(uid, group_id) {
 export function getGroupCalendar(group_id) {
   return get(ref(db, `groups/${group_id}/calendar`))
     .then((res) => {
-      return res.val();
+      return res.val() ? res.val() : [];
     })
     .catch((err) => {
       console.log("getGroupCalendar", err);
     });
+}
+
+export async function sheduleGame(group_id, date, name) {
+  getGroupCalendar(group_id).then((res) => {
+    const games = res[date] ? res[date] : [];
+    games.push(name);
+    const postRef = ref(db, `groups/${group_id}/calendar/${date}`);
+
+    set(postRef, games);
+  });
 }
