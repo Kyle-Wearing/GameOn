@@ -23,12 +23,41 @@ export const groupCalander = StyleSheet.create({
   backIcon: {
     padding: 10,
   },
-  button: {
-    flex: 1,
-  },
+  button: {},
   calendar: {
     borderWidth: 1,
+    margin: 1,
     borderColor: "black",
-    height: 355,
+    height: "auto",
+  },
+  dateText: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 10,
+    color: "#333",
+  },
+  eventList: {
+    marginTop: 10,
+  },
+  eventItem: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    marginBottom: 10,
+    width: "75%",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    alignSelf: "center",
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#333",
+    textAlign: "center",
   },
 });

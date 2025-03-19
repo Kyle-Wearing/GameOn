@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
 
 export function RecordScoresScreen({ route }) {
-  const { id, members, name } = route.params;
+  const { id, members, name, selected } = route.params;
   const [memberArr, setMemberArr] = useState([]);
   const [scoreModal, setScoreModal] = useState(false);
   const [username, setUsername] = useState("");

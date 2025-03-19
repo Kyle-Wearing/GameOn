@@ -103,3 +103,13 @@ export function leaveGroup(uid, group_id) {
   remove(ref(db, `groups/${group_id}/members/${uid}`));
   remove(ref(db, `users/${uid}/groups/${group_id}`));
 }
+
+export function getGroupCalendar(group_id) {
+  return get(ref(db, `groups/${group_id}/calendar`))
+    .then((res) => {
+      return res.val();
+    })
+    .catch((err) => {
+      console.log("getGroupCalendar", err);
+    });
+}

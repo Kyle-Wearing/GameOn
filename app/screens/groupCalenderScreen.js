@@ -1,23 +1,27 @@
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView, ScrollView, Text } from "react-native";
 import { groupCalander } from "../styles/groupCalander";
 import { Button, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { Calendar, Agenda } from "react-native-calendars";
+import { getGroupCalendar, getGroupCalendarDate } from "../../until";
 
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
   const navigation = useNavigation();
 
   function handleScore() {
-    navigation.navigate("RecordScoresScreen", { id, members, name });
+    navigation.navigate("RecordScoresScreen", { id, members, name, selected });
   }
+
+  function handleAddGame() {}
 
   const [selected, setSelected] = useState(getTodaysDate());
   const [selectedDates, setSelectedDates] = useState({});
+  const [savedGames, setSavedGames] = useState([]);
 
-  const dot = { key: "workout", color: "blue", selectedDotColor: "white" };
+  const dot = { color: "blue", selectedDotColor: "white" };
   function getTodaysDate() {
     return new Date().toLocaleDateString().split("/").reverse().join("-");
   }
@@ -30,18 +34,24 @@ export function GroupCalanderScreen({ route }) {
         selectedDotColor: "white",
       },
     };
-    const apiCall = [
-      {
-        "2025-03-25": { dots: [dot] },
-      },
-    ];
-    apiCall.forEach((date) => {
-      if (Object.keys(date)[0] === selected) {
-        Object.values(date)[0].selected = true;
+
+    getGroupCalendar(id).then((res) => {
+      if (!res) {
+        res = [];
       }
-      daySelected[Object.keys(date)[0]] = Object.values(date)[0];
+      setSavedGames([]);
+      const games = [];
+      Object.entries(res).forEach((date) => {
+        games.push(date[1]);
+        daySelected[date[0]] = { dots: [dot] };
+        if (date[0] === selected) {
+          daySelected[date[0]].selected = true;
+          setSavedGames(games.flat());
+        }
+      });
+
+      setSelectedDates(daySelected);
     });
-    setSelectedDates(daySelected);
   }, [selected]);
 
   return (
@@ -88,7 +98,24 @@ export function GroupCalanderScreen({ route }) {
       </SafeAreaView>
       <View style={groupCalander.button}>
         <Button title={"record scores"} onPress={handleScore} />
+        <Button title={"Add Game"} onPress={handleAddGame} />
       </View>
+      <Text style={groupCalander.dateText}>
+        {selected.split("-").reverse().join(" / ")}
+      </Text>
+      <ScrollView style={groupCalander.eventList}>
+        {savedGames.length ? (
+          savedGames.map((game) => (
+            <View key={game} style={groupCalander.eventItem}>
+              <Text style={groupCalander.eventTitle}>{game}</Text>
+            </View>
+          ))
+        ) : (
+          <View style={groupCalander.eventItem}>
+            <Text style={groupCalander.eventTitle}>No Games Sheduled</Text>
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
