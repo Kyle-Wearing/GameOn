@@ -32,7 +32,7 @@ function JoinGroupScreen() {
     if (joinCode) {
       const check = await checkInGroup(joinCode, user.uid);
       if (!check) {
-        joinGroupById(joinCode, user.uid, user.username)
+        joinGroupById(joinCode, user.uid)
           .then(() => {
             setJoinVisible(false);
             navigation.navigate("GameOn", {
@@ -52,16 +52,16 @@ function JoinGroupScreen() {
 
   function handleCreateGroup() {
     if (groupName) {
-      setCreateVisible(false);
-      createGroup(groupName)
-        .then((code) => {
-          const codeStr = code.toString();
-          const group_id = codeStr.split("/")[4];
-          joinGroupById(group_id.slice(1), user.uid, user.username).then(() => {
+      createGroup(user.uid, groupName)
+        .then((group_id) => {
+          if (group_id) {
+            setCreateVisible(false);
             navigation.navigate("GameOn", {
               screen: "Home",
             });
-          });
+          } else {
+            setError("something went wrong");
+          }
         })
         .catch((err) => {
           console.log(err);

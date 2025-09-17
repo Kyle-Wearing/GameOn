@@ -20,22 +20,14 @@ function HomePageScreen() {
 
   useEffect(() => {
     getGroupsByUID(user.uid).then((newGroups) => {
-      const groupArr = [];
-      for (const group in newGroups) {
-        groupArr.push({
-          group_id: group,
-          groupName: newGroups[group].groupName,
-        });
-      }
-      if (groupArr.length) {
-        setFullGroups(groupArr);
-        setGroups(groupArr);
+      if (newGroups.length) {
+        setFullGroups(newGroups);
+        setGroups(newGroups);
       } else {
         setGroups([
           {
-            group_id: "to join groups",
-            groupName:
-              "you are not in any groups, join or create groups and they will appear here!",
+            id: "to join groups",
+            name: "you are not in any groups, join or create groups and they will appear here!",
           },
         ]);
       }
@@ -103,13 +95,13 @@ function HomePageScreen() {
           {groups.map((group) => {
             return (
               <TouchableOpacity
-                key={group.group_id}
+                key={group.id}
                 style={homePage.groupButton}
                 onPress={() => {
-                  handlePress(group.group_id);
+                  handlePress(group.id);
                 }}
               >
-                <Text style={homePage.groupText}>{group.groupName}</Text>
+                <Text style={homePage.groupText}>{group.name}</Text>
               </TouchableOpacity>
             );
           })}

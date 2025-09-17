@@ -6,7 +6,7 @@ import { Modal } from "react-native";
 import { View } from "react-native";
 import { userSettings } from "../styles/userSettings";
 import { TextInput } from "react-native";
-import { updateUsername } from "../../until";
+import { test, updateUsername } from "../../until";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function UserPageScreen() {
@@ -76,8 +76,13 @@ function UserPageScreen() {
           </View>
         </View>
       </Modal>
-      <Image></Image>
       <Text style={userSettings.text}>Username: {user.username}</Text>
+      <Button
+        title="test"
+        onPress={() => {
+          test("9Acz7vl78fN6LhBl0UYWFfQERUf1");
+        }}
+      ></Button>
       <Button
         onPress={() => setEditUserVisible(true)}
         title="Edit Account"

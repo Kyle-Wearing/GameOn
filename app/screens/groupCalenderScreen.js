@@ -17,7 +17,6 @@ export function GroupCalanderScreen({ route }) {
 
   async function handleAddGame() {
     if (gameInput) {
-      console.log("here first");
       await sheduleGame(id, selected, gameInput);
       setAddGameVisible(false);
       setGameInput("");

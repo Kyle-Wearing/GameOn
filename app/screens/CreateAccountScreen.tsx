@@ -64,7 +64,7 @@ function CreateAccountScreen() {
           );
           setLoading(false);
           if (user) {
-            await postUser(user.user.uid, email, username);
+            await postUser(user.user.uid, username);
             const newUser = await getUser(user.user.uid);
             _saveData(user.user.uid, newUser.username);
             setUser({ uid: user.user.uid, username: newUser.username });
