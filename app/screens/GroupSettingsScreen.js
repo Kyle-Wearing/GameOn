@@ -15,13 +15,17 @@ function GroupSettingsScreen({ route }) {
   const navigation = useNavigation();
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
-  const id = group_id.slice(1);
+  const id = group_id;
   const { user } = useContext(UserContext);
 
-  function handleConfirm() {
+  async function handleConfirm() {
     if (newName) {
-      updateGroupSettings(id, newName, groupMembers);
-      navigation.pop();
+      const update = await updateGroupSettings(id, newName);
+      if (update === 200) {
+        navigation.pop();
+      } else {
+        setError("something went wrong");
+      }
     } else {
       setError("must enter group name");
     }

@@ -37,7 +37,7 @@ function HomePageScreen() {
   useEffect(() => {
     if (search) {
       const filteredGroups = fullGroups.filter((group) => {
-        const groupName = group.groupName.trim().toLowerCase();
+        const groupName = group.name.trim().toLowerCase();
         return groupName.includes(search.trim().toLowerCase());
       });
       if (filteredGroups.length) {
@@ -45,8 +45,8 @@ function HomePageScreen() {
       } else {
         setGroups([
           {
-            group_id: "empty search",
-            groupName: "No groups match that search.",
+            id: "empty search",
+            name: "No groups match that search.",
           },
         ]);
       }

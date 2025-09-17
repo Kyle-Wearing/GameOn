@@ -30,17 +30,21 @@ function JoinGroupScreen() {
 
   async function handleJoinGroup() {
     if (joinCode) {
-      const check = await checkInGroup(joinCode, user.uid);
+      const check = await checkInGroup(user.uid, joinCode);
       if (!check) {
         joinGroupById(joinCode, user.uid)
-          .then(() => {
-            setJoinVisible(false);
-            navigation.navigate("GameOn", {
-              screen: "Home",
-            });
+          .then((status) => {
+            if (status === 200) {
+              setJoinVisible(false);
+              navigation.navigate("GameOn", {
+                screen: "Home",
+              });
+            } else {
+              setError("invalid join code");
+            }
           })
           .catch((err) => {
-            setError("invalid join code");
+            setError("something went wrong");
           });
       } else {
         setError("you are already in this group");

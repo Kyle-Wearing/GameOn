@@ -71,14 +71,25 @@ export async function getGroupsByUID(uid) {
 // }
 
 export async function getGroupByGroupId(id) {
-  return get(ref(db, `groups/-${id}`))
+  return api
+    .get(`group/${id}`)
     .then((res) => {
-      return res.val();
+      return res.data.items;
     })
     .catch((err) => {
-      console.log("get group by id", err);
+      console.log(err);
     });
 }
+
+// export async function getGroupByGroupId(id) {
+//   return get(ref(db, `groups/-${id}`))
+//     .then((res) => {
+//       return res.val();
+//     })
+//     .catch((err) => {
+//       console.log("get group by id", err);
+//     });
+// }
 
 export async function createGroup(creator_id, name) {
   return api
@@ -106,12 +117,14 @@ export async function createGroup(creator_id, name) {
 
 export async function joinGroupById(group_id, user_id) {
   return api
-    .post(`groups/${group_id}`, { user_id })
+    .post(`group/${group_id}`, { user_id })
     .then((res) => {
       console.log(res.status);
+      return 200;
     })
     .catch((err) => {
       console.log("join group by id", err);
+      return 404;
     });
 }
 
@@ -127,50 +140,77 @@ export async function joinGroupById(group_id, user_id) {
 //   });
 // }
 
-export async function checkInGroup(group_id, uid) {
-  return get(ref(db, `groups/-${group_id}/members/${uid}`))
+export async function checkInGroup(uid, group_id) {
+  return api
+    .get(`groups/${group_id}/members/${uid}`)
     .then((res) => {
-      return res.val();
+      return res.data.count;
     })
     .catch((err) => {
-      console.log("check in group", err);
+      console.log("check in group", err.code);
     });
 }
 
-export function updateGroupSettings(group_id, newName, members) {
-  set(ref(db, `groups/-${group_id}/groupName`), newName);
-  members.forEach((member) => {
-    const uid = member.uid;
-    set(ref(db, `users/${uid}/groups/-${group_id}/groupName`), newName);
-  });
+// export async function checkInGroup(group_id, uid) {
+//   return get(ref(db, `groups/-${group_id}/members/${uid}`))
+//     .then((res) => {
+//       return res.val();
+//     })
+//     .catch((err) => {
+//       console.log("check in group", err);
+//     });
+// }
+
+export async function updateGroupSettings(group_id, name) {
+  return api
+    .put(`group/${group_id}`, {
+      name,
+    })
+    .then((res) => {
+      return 200;
+    })
+    .catch((err) => {
+      console.log("update group settings", err.message);
+      return 400;
+    });
 }
 
-export function updateGroupScores(uids, group_id) {
-  uids.forEach((uid, index) => {
-    get(ref(db, `groups/${group_id}/members/${uid.uid}`)).then((res) => {
-      const inc = Number(res.val().wins) + 1;
-      const scoreInc = Number(res.val().score) + uids.length - index - 1;
-      if (index === 0) {
-        set(ref(db, `groups/${group_id}/members/${uid.uid}/wins`), inc);
-      }
-      set(ref(db, `groups/${group_id}/members/${uid.uid}/score`), scoreInc);
-    });
-  });
-}
+// export function updateGroupSettings(group_id, newName, members) {
+//   set(ref(db, `groups/-${group_id}/groupName`), newName);
+//   members.forEach((member) => {
+//     const uid = member.uid;
+//     set(ref(db, `users/${uid}/groups/-${group_id}/groupName`), newName);
+//   });
+// }
 
 export async function updateUsername(uid, username) {
-  set(ref(db, `users/${uid}/username`), username);
-  const groups = await getGroupsByUID(uid);
-  const groupIds = Object.keys(groups);
-  groupIds.forEach((group_id) => {
-    set(ref(db, `groups/${group_id}/members/${uid}/username`), username);
-  });
+  return api
+    .put(`users/${uid}`, { username })
+    .then((res) => {
+      return 200;
+    })
+    .catch((err) => {
+      console.log("update username", err);
+    });
 }
 
-export function leaveGroup(uid, group_id) {
-  remove(ref(db, `groups/${group_id}/members/${uid}`));
-  remove(ref(db, `users/${uid}/groups/${group_id}`));
+// export async function updateUsername(uid, username) {
+//   set(ref(db, `users/${uid}/username`), username);
+//   const groups = await getGroupsByUID(uid);
+//   const groupIds = Object.keys(groups);
+//   groupIds.forEach((group_id) => {
+//     set(ref(db, `groups/${group_id}/members/${uid}/username`), username);
+//   });
+// }
+
+export async function leaveGroup(uid, group_id) {
+  return api.delete(`groups/${group_id}/members/${uid}`);
 }
+
+// export function leaveGroup(uid, group_id) {
+//   remove(ref(db, `groups/${group_id}/members/${uid}`));
+//   remove(ref(db, `users/${uid}/groups/${group_id}`));
+// }
 
 export function getGroupCalendar(group_id) {
   return get(ref(db, `groups/${group_id}/calendar`))

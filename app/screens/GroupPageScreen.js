@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView, Text } from "react-native";
 import { getGroupByGroupId } from "../../until";
 import { groupPage } from "../styles/groupPage";
@@ -24,23 +24,16 @@ export function GroupsPageScreen({ route }) {
   useFocusEffect(
     React.useCallback(() => {
       const getGroupData = async () => {
-        const group = await getGroupByGroupId(id.slice(1));
-        const memberArr = [];
-        for (const member in group.members) {
-          memberArr.push({
-            uid: member,
-            username: group.members[member].username,
-            wins: group.members[member].wins,
-            score: group.members[member].score,
-          });
-        }
-        setName(group.groupName);
-        memberArr.sort((a, b) => b.score - a.score);
-        setMembers(memberArr);
+        const group = await getGroupByGroupId(id);
+        setName(group[0].group_name);
+        const newMembers = group.map((member) => {
+          return { username: member.username, score: "0", wins: "0" };
+        });
+        setMembers(newMembers);
       };
 
       getGroupData();
-    })
+    }, [id])
   );
 
   return (
@@ -70,7 +63,7 @@ export function GroupsPageScreen({ route }) {
               {members.map((member, index) => {
                 return (
                   <View
-                    key={member.uid}
+                    key={index}
                     style={
                       index === 0
                         ? groupPage.memberCard0

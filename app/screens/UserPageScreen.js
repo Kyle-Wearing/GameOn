@@ -80,7 +80,7 @@ function UserPageScreen() {
       <Button
         title="test"
         onPress={() => {
-          test("9Acz7vl78fN6LhBl0UYWFfQERUf1");
+          test("9Acz7vl78fN6LhBl0UYWFfQERUf1", "Y1P50O");
         }}
       ></Button>
       <Button
