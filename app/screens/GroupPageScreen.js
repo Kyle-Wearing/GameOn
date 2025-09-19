@@ -16,7 +16,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 export function GroupsPageScreen({ route }) {
   const { id } = route.params;
   const navigation = useNavigation();
-
   const [name, setName] = useState("");
   const [members, setMembers] = useState([]);
   const isFocused = useIsFocused();
@@ -91,9 +90,13 @@ export function GroupsPageScreen({ route }) {
           <View style={groupPage.messages}>
             <TouchableOpacity
               style={groupPage.button}
-              onPress={() => alert("to be added")}
+              onPress={() =>
+                navigation.navigate("GroupGameScreen", {
+                  id,
+                })
+              }
             >
-              <Text style={groupPage.buttonText}>messages</Text>
+              <Text style={groupPage.buttonText}>Games</Text>
             </TouchableOpacity>
           </View>
           <View style={groupPage.settings}>
@@ -107,7 +110,7 @@ export function GroupsPageScreen({ route }) {
                 });
               }}
             >
-              <Text style={groupPage.buttonText}>settings</Text>
+              <Text style={groupPage.buttonText}>Settings</Text>
             </TouchableOpacity>
           </View>
           <View style={groupPage.calander}>
@@ -121,7 +124,7 @@ export function GroupsPageScreen({ route }) {
                 })
               }
             >
-              <Text style={groupPage.buttonText}>calander</Text>
+              <Text style={groupPage.buttonText}>Calander</Text>
             </TouchableOpacity>
           </View>
           <View style={groupPage.history}></View>
@@ -129,7 +132,7 @@ export function GroupsPageScreen({ route }) {
             style={groupPage.button}
             onPress={() => alert("to be added")}
           >
-            <Text style={groupPage.buttonText}>game history</Text>
+            <Text style={groupPage.buttonText}>Game History</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

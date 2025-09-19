@@ -78,12 +78,6 @@ function UserPageScreen() {
       </Modal>
       <Text style={userSettings.text}>Username: {user.username}</Text>
       <Button
-        title="test"
-        onPress={() => {
-          test("9Acz7vl78fN6LhBl0UYWFfQERUf1", "Y1P50O");
-        }}
-      ></Button>
-      <Button
         onPress={() => setEditUserVisible(true)}
         title="Edit Account"
       ></Button>

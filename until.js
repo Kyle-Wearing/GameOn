@@ -212,6 +212,17 @@ export async function leaveGroup(uid, group_id) {
 //   remove(ref(db, `users/${uid}/groups/${group_id}`));
 // }
 
+export async function getGroupGames(group_id) {
+  return api
+    .get(`groups/${group_id}/games`)
+    .then((res) => {
+      return res.data.items;
+    })
+    .catch((err) => {
+      console.log("get group games", err);
+    });
+}
+
 export function getGroupCalendar(group_id) {
   return get(ref(db, `groups/${group_id}/calendar`))
     .then((res) => {
