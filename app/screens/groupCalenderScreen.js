@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
-import { getGroupCalendar, sheduleGame } from "../../until";
+import { createGame, getGroupCalendar, sheduleGame } from "../../until";
 
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
@@ -17,9 +17,23 @@ export function GroupCalanderScreen({ route }) {
 
   async function handleAddGame() {
     if (gameInput) {
-      await sheduleGame(id, selected, gameInput);
-      setAddGameVisible(false);
-      setGameInput("");
+      const { game_id } = await createGame(id, gameInput);
+      const sessionId = await sheduleGame(id, game_id, selected);
+
+      if (sessionId) {
+        const newSession = {
+          session_id: sessionId.session_id,
+          game_id,
+          game_name: gameInput,
+          group_id: id,
+          played_at: selected,
+        };
+        addSessionToGrouped(savedGames, newSession);
+        setAddGameVisible(false);
+        setGameInput("");
+      } else {
+        setError("Something Went Wrong");
+      }
     } else {
       setError("Must Enter Game");
     }
@@ -31,8 +45,8 @@ export function GroupCalanderScreen({ route }) {
   const [addGameVisibile, setAddGameVisible] = useState(false);
   const [gameInput, setGameInput] = useState("");
   const [error, setError] = useState("");
-
-  // const dot = { color: "blue", selectedDotColor: "white" };
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedSession, setSelectedSession] = useState({});
 
   function getTodaysDate() {
     return new Date().toLocaleDateString().split("/").reverse().join("-");
@@ -50,13 +64,30 @@ export function GroupCalanderScreen({ route }) {
 
       grouped[date].push(session);
     });
-
     return grouped;
   }
 
+  function addSessionToGrouped(grouped, newSession) {
+    const date = newSession.played_at;
+
+    const updated = { ...grouped };
+    if (!updated[date]) {
+      updated[date] = [];
+    }
+    updated[date] = [...updated[date], newSession];
+
+    setSavedGames(updated);
+  }
+
+  const gameColourMap = {};
   function getColourForGame(game_id) {
     const colours = ["#FF5733", "#33C1FF", "#9B59B6", "#27AE60", "#F1C40F"];
-    return colours[game_id % colours.length];
+    if (!gameColourMap[game_id]) {
+      const index = Object.keys(gameColourMap).length % colours.length;
+      gameColourMap[game_id] = colours[index];
+    }
+
+    return gameColourMap[game_id];
   }
 
   function buildMarkedDates(grouped, selected) {
@@ -90,19 +121,33 @@ export function GroupCalanderScreen({ route }) {
 
   useEffect(() => {
     getGroupCalendar(id).then((dates) => {
-      setSavedGames(dates);
+      const grouped = normalizeSessions(Object.values(dates));
+      setSavedGames(grouped);
     });
   }, []);
 
   useEffect(() => {
-    const grouped = normalizeSessions(Object.values(savedGames));
-    const marked = buildMarkedDates(grouped, selected);
-
+    const marked = buildMarkedDates(savedGames, selected);
     setSelectedDates(marked);
   }, [selected, savedGames]);
 
   return (
     <SafeAreaView style={groupCalander.container}>
+      <Modal animationType="none" transparent={true} visible={modalVisible}>
+        <View style={groupCalander.centeredView}>
+          <View style={groupCalander.modalView}>
+            <Text>{selectedSession.session_gameName}</Text>
+            <Button title="unshedule game"></Button>
+            <Button title="record scores"></Button>
+            <Button
+              title="cancel"
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            ></Button>
+          </View>
+        </View>
+      </Modal>
       <View style={groupCalander.header}>
         <TouchableOpacity
           style={groupCalander.backIcon}
@@ -188,13 +233,23 @@ export function GroupCalanderScreen({ route }) {
       <Text style={groupCalander.dateText}>
         {selected.split("-").reverse().join(" / ")}
       </Text>
-      {/* <ScrollView style={groupCalander.eventList}>
+      <ScrollView style={groupCalander.eventList}>
         {savedGames[selected] ? (
           savedGames[selected].map((game, index) => {
             return (
-              <View key={index} style={groupCalander.eventItem}>
-                <Text style={groupCalander.eventTitle}>{game}</Text>
-              </View>
+              <TouchableOpacity
+                key={index}
+                style={groupCalander.eventItem}
+                onPress={() => {
+                  setSelectedSession({
+                    session_id: game.session_id,
+                    session_gameName: game.game_name,
+                  });
+                  setModalVisible(true);
+                }}
+              >
+                <Text style={groupCalander.eventTitle}>{game.game_name}</Text>
+              </TouchableOpacity>
             );
           })
         ) : (
@@ -202,7 +257,7 @@ export function GroupCalanderScreen({ route }) {
             <Text style={groupCalander.eventTitle}>No Games Sheduled</Text>
           </View>
         )}
-      </ScrollView> */}
+      </ScrollView>
     </SafeAreaView>
   );
 }

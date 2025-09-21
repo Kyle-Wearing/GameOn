@@ -6,6 +6,7 @@ export const joinGroup = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.4)",
   },
   input: {
     height: 50,

@@ -257,7 +257,7 @@ export async function sheduleGame(group_id, game_id, played_at) {
   return api
     .post(`groups/${group_id}/calendar`, { game_id, played_at })
     .then((res) => {
-      console.log(res);
+      return res.data;
     })
     .catch((err) => {
       console.log("shedule game", err);
