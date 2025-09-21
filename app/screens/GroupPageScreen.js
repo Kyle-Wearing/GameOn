@@ -93,6 +93,7 @@ export function GroupsPageScreen({ route }) {
               onPress={() =>
                 navigation.navigate("GroupGameScreen", {
                   id,
+                  name,
                 })
               }
             >

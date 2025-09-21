@@ -223,6 +223,17 @@ export async function getGroupGames(group_id) {
     });
 }
 
+export async function createGame(group_id, name) {
+  return api
+    .post(`groups/${group_id}/games`, { name })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("create game", err);
+    });
+}
+
 export function getGroupCalendar(group_id) {
   return get(ref(db, `groups/${group_id}/calendar`))
     .then((res) => {

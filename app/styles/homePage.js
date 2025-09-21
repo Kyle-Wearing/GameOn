@@ -12,7 +12,7 @@ export const homePage = StyleSheet.create({
     paddingBottom: 20,
   },
   groupButton: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#dfdbdbff",
     padding: 15,
     marginBottom: 10,
     borderRadius: 8,
