@@ -234,22 +234,42 @@ export async function createGame(group_id, name) {
     });
 }
 
-export function getGroupCalendar(group_id) {
-  return get(ref(db, `groups/${group_id}/calendar`))
+export async function getGroupCalendar(group_id) {
+  return api
+    .get(`groups/${group_id}/calendar`)
     .then((res) => {
-      return res.val() ? res.val() : [];
+      return res.data.items;
+    })
+    .catch((err) => console.log("get group calendar", err));
+}
+
+// export function getGroupCalendar(group_id) {
+//   return get(ref(db, `groups/${group_id}/calendar`))
+//     .then((res) => {
+//       return res.val() ? res.val() : [];
+//     })
+//     .catch((err) => {
+//       console.log("getGroupCalendar", err);
+//     });
+// }
+
+export async function sheduleGame(group_id, game_id, played_at) {
+  return api
+    .post(`groups/${group_id}/calendar`, { game_id, played_at })
+    .then((res) => {
+      console.log(res);
     })
     .catch((err) => {
-      console.log("getGroupCalendar", err);
+      console.log("shedule game", err);
     });
 }
 
-export async function sheduleGame(group_id, date, name) {
-  getGroupCalendar(group_id).then((res) => {
-    const games = res[date] ? res[date] : [];
-    games.push(name);
-    const postRef = ref(db, `groups/${group_id}/calendar/${date}`);
+// export async function sheduleGame(group_id, date, name) {
+//   getGroupCalendar(group_id).then((res) => {
+//     const games = res[date] ? res[date] : [];
+//     games.push(name);
+//     const postRef = ref(db, `groups/${group_id}/calendar/${date}`);
 
-    set(postRef, games);
-  });
-}
+//     set(postRef, games);
+//   });
+// }

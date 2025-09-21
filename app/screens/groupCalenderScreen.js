@@ -20,7 +20,6 @@ export function GroupCalanderScreen({ route }) {
       await sheduleGame(id, selected, gameInput);
       setAddGameVisible(false);
       setGameInput("");
-      setRefresh(refresh * -1);
     } else {
       setError("Must Enter Game");
     }
@@ -32,40 +31,75 @@ export function GroupCalanderScreen({ route }) {
   const [addGameVisibile, setAddGameVisible] = useState(false);
   const [gameInput, setGameInput] = useState("");
   const [error, setError] = useState("");
-  const [refresh, setRefresh] = useState(1);
 
-  const dot = { color: "blue", selectedDotColor: "white" };
+  // const dot = { color: "blue", selectedDotColor: "white" };
+
   function getTodaysDate() {
     return new Date().toLocaleDateString().split("/").reverse().join("-");
   }
 
-  useEffect(() => {
-    const daySelected = {
-      [selected]: {
+  function normalizeSessions(sessions) {
+    const grouped = {};
+
+    sessions.forEach((session) => {
+      const date = session.played_at;
+
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+
+      grouped[date].push(session);
+    });
+
+    return grouped;
+  }
+
+  function getColourForGame(game_id) {
+    const colours = ["#FF5733", "#33C1FF", "#9B59B6", "#27AE60", "#F1C40F"];
+    return colours[game_id % colours.length];
+  }
+
+  function buildMarkedDates(grouped, selected) {
+    const marked = {};
+    Object.entries(grouped).forEach(([date, sessions]) => {
+      marked[date] = {
+        dots: sessions.map((session) => {
+          return {
+            key: `${session.session_id}`,
+            color: getColourForGame(session.game_id),
+          };
+        }),
+      };
+    });
+
+    if (selected) {
+      const existing = marked[selected] || { dots: [] };
+
+      marked[selected] = {
+        ...existing,
         selected: true,
         disableTouchEvent: true,
-        selectedDotColor: "white",
-      },
-    };
+        dots: existing.dots.map((dot) => ({
+          ...dot,
+          selectedDotColor: "white",
+        })),
+      };
+    }
+    return marked;
+  }
 
-    getGroupCalendar(id).then((res) => {
-      if (!res) {
-        res = [];
-      }
-      setSavedGames([]);
-      const games = {};
-      Object.entries(res).forEach((date) => {
-        games[date[0]] = date[1];
-        daySelected[date[0]] = { dots: [dot] };
-        if (date[0] === selected) {
-          daySelected[date[0]].selected = true;
-          setSavedGames(games);
-        }
-      });
-
-      setSelectedDates(daySelected);
+  useEffect(() => {
+    getGroupCalendar(id).then((dates) => {
+      setSavedGames(dates);
     });
-  }, [selected, refresh]);
+  }, []);
+
+  useEffect(() => {
+    const grouped = normalizeSessions(Object.values(savedGames));
+    const marked = buildMarkedDates(grouped, selected);
+
+    setSelectedDates(marked);
+  }, [selected, savedGames]);
 
   return (
     <SafeAreaView style={groupCalander.container}>
@@ -154,7 +188,7 @@ export function GroupCalanderScreen({ route }) {
       <Text style={groupCalander.dateText}>
         {selected.split("-").reverse().join(" / ")}
       </Text>
-      <ScrollView style={groupCalander.eventList}>
+      {/* <ScrollView style={groupCalander.eventList}>
         {savedGames[selected] ? (
           savedGames[selected].map((game, index) => {
             return (
@@ -168,7 +202,7 @@ export function GroupCalanderScreen({ route }) {
             <Text style={groupCalander.eventTitle}>No Games Sheduled</Text>
           </View>
         )}
-      </ScrollView>
+      </ScrollView> */}
     </SafeAreaView>
   );
 }
