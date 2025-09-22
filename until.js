@@ -273,3 +273,14 @@ export async function sheduleGame(group_id, game_id, played_at) {
 //     set(postRef, games);
 //   });
 // }
+
+export async function unsheduleGame(session_id) {
+  return api
+    .delete(`session/${session_id}`)
+    .then((res) => {
+      return res.data.deleted_session_id;
+    })
+    .catch((err) => {
+      console.log("unshedule game", err);
+    });
+}

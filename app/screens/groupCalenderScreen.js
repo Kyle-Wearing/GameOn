@@ -10,6 +10,7 @@ import {
   getGroupCalendar,
   getGroupGames,
   sheduleGame,
+  unsheduleGame,
 } from "../../until";
 
 export function GroupCalanderScreen({ route }) {
@@ -20,7 +21,38 @@ export function GroupCalanderScreen({ route }) {
     navigation.navigate("RecordScoresScreen", { id, members, name, selected });
   }
 
-  function handleUnshedule() {}
+  function removeSessionFromSelectedDay(
+    grouped,
+    selectedDate,
+    sessionIdToRemove
+  ) {
+    const updated = { ...grouped };
+
+    if (updated[selectedDate]) {
+      updated[selectedDate] = updated[selectedDate].filter(
+        (session) => session.session_id !== sessionIdToRemove
+      );
+
+      if (updated[selectedDate].length === 0) {
+        delete updated[selectedDate];
+      }
+    }
+
+    return updated;
+  }
+
+  async function handleUnshedule() {
+    const deletedSessionId = await unsheduleGame(selectedSession.session_id);
+    if (deletedSessionId) {
+      const newSavedGames = removeSessionFromSelectedDay(
+        savedGames,
+        selected,
+        deletedSessionId
+      );
+      setSavedGames(newSavedGames);
+      setModalVisible(false);
+    }
+  }
 
   async function handleAddGame() {
     if (gameInput) {
@@ -178,7 +210,9 @@ export function GroupCalanderScreen({ route }) {
       <Modal animationType="none" transparent={true} visible={modalVisible}>
         <View style={groupCalander.centeredView}>
           <View style={groupCalander.modalView}>
-            <Text>{selectedSession.session_gameName}</Text>
+            <Text style={groupCalander.eventTitle}>
+              {selectedSession.session_gameName}
+            </Text>
             <Button title="unshedule game" onPress={handleUnshedule}></Button>
             <Button title="record scores" onPress={handleScore}></Button>
             <Button
@@ -217,7 +251,7 @@ export function GroupCalanderScreen({ route }) {
             <View style={groupCalander.modalView}>
               {modalStep === "select" ? (
                 <>
-                  <Text>Select Game</Text>
+                  <Text style={groupCalander.eventTitle}>Select Game</Text>
                   <ScrollView style={groupCalander.gameList}>
                     <TouchableOpacity
                       style={groupCalander.gameItem}
@@ -269,6 +303,7 @@ export function GroupCalanderScreen({ route }) {
                       setSelectGameVisible(false);
                       setSelectedGameId(null);
                       setModalStep("select");
+                      setError("");
                     }}
                   />
                 </>
@@ -294,6 +329,7 @@ export function GroupCalanderScreen({ route }) {
                     title="Back"
                     onPress={() => {
                       setModalStep("select");
+                      setError("");
                     }}
                   />
                 </>
@@ -325,7 +361,7 @@ export function GroupCalanderScreen({ route }) {
       </SafeAreaView>
       <View style={groupCalander.button}>
         <Button
-          title={"Add Game"}
+          title={"Shedule Game"}
           onPress={() => {
             setSelectGameVisible(true);
           }}
