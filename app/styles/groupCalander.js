@@ -100,4 +100,35 @@ export const groupCalander = StyleSheet.create({
     color: "red",
     textAlign: "center",
   },
+  gameList: {
+    maxHeight: 200,
+    marginTop: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    backgroundColor: "#fafafa",
+  },
+  gameItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  gameTitle: {
+    fontSize: 16,
+    color: "#333",
+  },
+  selectedGameItem: {
+    backgroundColor: "#007AFF20",
+  },
+  selectedGameTitle: {
+    color: "#007AFF",
+    fontWeight: "600",
+  },
+  createNewGameText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#007AFF",
+  },
 });
