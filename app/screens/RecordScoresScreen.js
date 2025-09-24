@@ -25,7 +25,7 @@ export function RecordScoresScreen({ route }) {
 
   useEffect(() => {
     const newMembers = members.map((member) => {
-      return { username: member.username, user_id: member.user_id, score: 1 };
+      return { username: member.username, user_id: member.user_id, score: 0 };
     });
     setMemberArr(newMembers);
   }, []);
@@ -84,7 +84,7 @@ export function RecordScoresScreen({ route }) {
       });
       updateElo(calculatedScores, id, selectedSession.game_id);
 
-      //navigation.pop(1);
+      navigation.pop(1);
     }
   }
 
