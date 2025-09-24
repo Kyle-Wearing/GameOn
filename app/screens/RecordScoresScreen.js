@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { recordScores } from "../styles/recordScores";
-import { getElo, scoreSession, setSessionScored, updateElo } from "../../until";
+import { scoreSession, setSessionScored, updateElo } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 

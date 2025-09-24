@@ -23,7 +23,7 @@ export const groupPage = StyleSheet.create({
     padding: 10,
   },
   leaderboard: {
-    height: height * 0.4,
+    height: height * 0.5,
     width: width * 0.8,
     padding: 20,
     backgroundColor: "#ffffff",
@@ -123,6 +123,6 @@ export const groupPage = StyleSheet.create({
   },
   AndroidSafeArea: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-  }
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
 });

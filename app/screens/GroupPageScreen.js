@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text } from "react-native";
-import { getGroupByGroupId } from "../../until";
+import { getAverageElo, getGroupByGroupId } from "../../until";
 import { groupPage } from "../styles/groupPage";
 import { View } from "react-native";
 import {
@@ -28,8 +28,8 @@ export function GroupsPageScreen({ route }) {
         const newMembers = group.map((member) => {
           return {
             username: member.username,
-            score: "0",
-            wins: "0",
+            score: member.avg_elo,
+            wins: member.wins,
             user_id: member.user_id,
           };
         });
