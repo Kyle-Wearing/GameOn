@@ -72,7 +72,7 @@ export async function getGroupsByUID(uid) {
 
 export async function getGroupByGroupId(id) {
   return api
-    .get(`group/${id}`)
+    .get(`groups/${id}`)
     .then((res) => {
       return res.data.items;
     })
@@ -117,10 +117,9 @@ export async function createGroup(creator_id, name) {
 
 export async function joinGroupById(group_id, user_id) {
   return api
-    .post(`group/${group_id}`, { user_id })
+    .post(`groups/${group_id}`, { user_id })
     .then((res) => {
-      console.log(res.status);
-      return 200;
+      return res.status;
     })
     .catch((err) => {
       console.log("join group by id", err);
@@ -282,5 +281,51 @@ export async function unsheduleGame(session_id) {
     })
     .catch((err) => {
       console.log("unshedule game", err);
+    });
+}
+
+export async function getElo(group_id, game_id) {
+  return api
+    .get(`groups/${group_id}/elo/${game_id}`)
+    .then((res) => {
+      return res.data.items;
+    })
+    .catch((err) => {
+      console.log("get elo", err);
+    });
+}
+
+export async function updateElo(players, group_id, game_id) {
+  return api
+    .post(`groups/${group_id}/elo/${game_id}`, players, {
+      headers: { "Content-Type": "application/json" },
+    })
+    .then((res) => {
+      console.log("update elo success:");
+    })
+    .catch((err) => {
+      console.log("update elo error:", err.response);
+    });
+}
+
+export async function setSessionScored(session_id) {
+  return api
+    .put(`session/${session_id}`)
+    .then((res) => {
+      return res.data.status;
+    })
+    .catch((err) => {
+      console.log("set session scored", err);
+    });
+}
+
+export async function scoreSession(session_id, user_id, score, position) {
+  return api
+    .post(`session/${session_id}`, { user_id, score, position })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      console.log("score session", err);
     });
 }

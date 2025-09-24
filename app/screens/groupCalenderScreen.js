@@ -1,10 +1,11 @@
 import { Modal, SafeAreaView, ScrollView, Text, TextInput } from "react-native";
 import { groupCalander } from "../styles/groupCalander";
 import { Button, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
+
 import {
   createGame,
   getGroupCalendar,
@@ -16,9 +17,17 @@ import {
 export function GroupCalanderScreen({ route }) {
   const { id, members, name } = route.params;
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   function handleScore() {
-    navigation.navigate("RecordScoresScreen", { id, members, name, selected });
+    setModalVisible(false);
+    navigation.navigate("RecordScoresScreen", {
+      id,
+      members,
+      name,
+      selected,
+      selectedSession,
+    });
   }
 
   function removeSessionFromSelectedDay(
@@ -191,14 +200,16 @@ export function GroupCalanderScreen({ route }) {
   }
 
   useEffect(() => {
-    getGroupCalendar(id).then((dates) => {
-      const grouped = normalizeSessions(Object.values(dates));
-      setSavedGames(grouped);
-    });
-    getGroupGames(id).then((games) => {
-      setAvailableGames(games);
-    });
-  }, []);
+    if (isFocused) {
+      getGroupCalendar(id).then((dates) => {
+        const grouped = normalizeSessions(Object.values(dates));
+        setSavedGames(grouped);
+      });
+      getGroupGames(id).then((games) => {
+        setAvailableGames(games);
+      });
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     const marked = buildMarkedDates(savedGames, selected);
@@ -213,8 +224,15 @@ export function GroupCalanderScreen({ route }) {
             <Text style={groupCalander.eventTitle}>
               {selectedSession.session_gameName}
             </Text>
-            <Button title="unshedule game" onPress={handleUnshedule}></Button>
-            <Button title="record scores" onPress={handleScore}></Button>
+            {!selectedSession.scored ? (
+              <>
+                <Button
+                  title="unshedule game"
+                  onPress={handleUnshedule}
+                ></Button>
+                <Button title="record scores" onPress={handleScore}></Button>
+              </>
+            ) : null}
             <Button
               title="cancel"
               onPress={() => {
@@ -376,11 +394,17 @@ export function GroupCalanderScreen({ route }) {
             return (
               <TouchableOpacity
                 key={index}
-                style={groupCalander.eventItem}
+                style={
+                  game.scored
+                    ? groupCalander.scoredEventItem
+                    : groupCalander.eventItem
+                }
                 onPress={() => {
                   setSelectedSession({
                     session_id: game.session_id,
                     session_gameName: game.game_name,
+                    game_id: game.game_id,
+                    scored: game.scored,
                   });
                   setModalVisible(true);
                 }}

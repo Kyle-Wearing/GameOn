@@ -26,7 +26,12 @@ export function GroupsPageScreen({ route }) {
         const group = await getGroupByGroupId(id);
         setName(group[0].group_name);
         const newMembers = group.map((member) => {
-          return { username: member.username, score: "0", wins: "0" };
+          return {
+            username: member.username,
+            score: "0",
+            wins: "0",
+            user_id: member.user_id,
+          };
         });
         setMembers(newMembers);
       };

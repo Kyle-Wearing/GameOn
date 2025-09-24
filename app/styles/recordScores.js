@@ -79,7 +79,7 @@ export const recordScores = StyleSheet.create({
     transform: [{ translateX: "-50%" }],
   },
   titleText: {
-    fontSize: 25,
+    fontSize: 30,
     textAlign: "center",
   },
   backIcon: {
@@ -114,6 +114,10 @@ export const recordScores = StyleSheet.create({
   },
   AndroidSafeArea: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
-  }
+    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  },
+  subText: {
+    fontSize: 20,
+    textAlign: "center",
+  },
 });

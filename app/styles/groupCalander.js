@@ -54,6 +54,24 @@ export const groupCalander = StyleSheet.create({
     shadowRadius: 4,
     alignSelf: "center",
   },
+
+  scoredEventItem: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    marginBottom: 10,
+    width: "75%",
+    backgroundColor: "#e6ffe6",
+    borderRadius: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    alignSelf: "center",
+    borderWidth: 1,
+    borderColor: "#27AE60",
+  },
+
   eventTitle: {
     fontSize: 18,
     fontWeight: "500",

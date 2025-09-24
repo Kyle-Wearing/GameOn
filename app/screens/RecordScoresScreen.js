@@ -1,32 +1,95 @@
 import { useEffect, useState } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { Modal } from "react-native";
-import { SafeAreaView, Text, TextInput } from "react-native";
+import {
+  TouchableOpacity,
+  View,
+  Button,
+  Modal,
+  SafeAreaView,
+  Text,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { recordScores } from "../styles/recordScores";
-import { Button } from "react-native";
-import { updateGroupScores } from "../../until";
+import { getElo, scoreSession, setSessionScored, updateElo } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-import { ScrollView } from "react-native";
 
 export function RecordScoresScreen({ route }) {
-  const { id, members, name, selected } = route.params;
+  const { id, members, name, selected, selectedSession } = route.params;
   const [memberArr, setMemberArr] = useState([]);
   const [scoreModal, setScoreModal] = useState(false);
   const [username, setUsername] = useState("");
   const [scoreInput, setScoreInput] = useState("");
-  const [uid, setUid] = useState("");
+  const [user_id, setuser_id] = useState("");
   const navigation = useNavigation();
 
   useEffect(() => {
     const newMembers = members.map((member) => {
-      return { username: member.username, uid: member.uid, score: 0 };
+      return { username: member.username, user_id: member.user_id, score: 1 };
     });
     setMemberArr(newMembers);
   }, []);
 
-  function handlePress(uid, username) {
-    setUid(uid);
+  function calculateEloChange(players) {
+    let prevScore = null;
+    let prevPosition = null;
+    const newPlayers = players.map((player, index) => {
+      let position;
+      if (player.score === prevScore) {
+        position = prevPosition;
+      } else {
+        position = index + 1;
+        prevPosition = position;
+      }
+      prevScore = player.score;
+
+      return {
+        ...player,
+        position,
+      };
+    });
+
+    const updatedPlayers = newPlayers.map((player) => {
+      const minChange = -players.length * 5;
+      const maxChange = players.length * 5;
+      const ratio = (player.position - 1) / (players.length - 1 || 1);
+      const eloChange = Math.round(maxChange + ratio * (minChange - maxChange));
+
+      return {
+        ...player,
+        eloChange,
+        game_id: selectedSession.game_id,
+        group_id: id,
+      };
+    });
+
+    return updatedPlayers;
+  }
+
+  async function handleSubmit() {
+    const updated = await setSessionScored(selectedSession.session_id);
+    if (updated) {
+      const membersToUpdate = memberArr.filter((member) => {
+        return member.score;
+      });
+      const sorted = membersToUpdate.sort((a, b) => b.score - a.score);
+      const calculatedScores = calculateEloChange(sorted);
+      calculatedScores.forEach((player) => {
+        scoreSession(
+          selectedSession.session_id,
+          player.user_id,
+          player.score,
+          player.position
+        );
+      });
+      updateElo(calculatedScores, id, selectedSession.game_id);
+
+      //navigation.pop(1);
+    }
+  }
+
+  function handlePress(user_id, username) {
+    setuser_id(user_id);
     setUsername(username);
     setScoreModal(true);
   }
@@ -34,28 +97,16 @@ export function RecordScoresScreen({ route }) {
   function handleConfirm() {
     setScoreModal(false);
     const index = memberArr.findIndex((member) => {
-      return member.uid === uid;
+      return member.user_id === user_id;
     });
     setMemberArr((currMembers) => {
       const newMembers = [...currMembers];
-      newMembers[index].score = scoreInput || "0";
+      newMembers[index].score = Number(scoreInput) || 0;
       return newMembers;
     });
-    setUid("");
+    setuser_id("");
     setScoreInput("");
     setUsername("");
-  }
-
-  function handleSubmit() {
-    const sortedMembers = memberArr.filter((member) => {
-      return member.score !== 0;
-    });
-    sortedMembers.sort((a, b) => {
-      return Number(b.score) - Number(a.score);
-    });
-
-    updateGroupScores(sortedMembers, id);
-    navigation.pop(2);
   }
 
   return (
@@ -77,6 +128,11 @@ export function RecordScoresScreen({ route }) {
           <Text style={recordScores.titleText}>{name}</Text>
         </View>
       </View>
+      <Text style={recordScores.subText}>{selected}</Text>
+      <Text style={recordScores.subText}>
+        {selectedSession.session_gameName}
+      </Text>
+      <Text style={recordScores.subText}>Enter Game Scores</Text>
       <Modal animationType="none" transparent={true} visible={scoreModal}>
         <View style={recordScores.centeredView}>
           <View style={recordScores.modalView}>
@@ -97,7 +153,7 @@ export function RecordScoresScreen({ route }) {
               onPress={() => {
                 setScoreModal(false);
                 setUsername("");
-                setUid("");
+                setuser_id("");
                 setScoreInput("");
               }}
             ></Button>
@@ -109,10 +165,10 @@ export function RecordScoresScreen({ route }) {
           {memberArr.map((member) => {
             return (
               <TouchableOpacity
-                key={member.uid}
+                key={member.user_id}
                 style={recordScores.playerButton}
                 onPress={() => {
-                  handlePress(member.uid, member.username);
+                  handlePress(member.user_id, member.username);
                 }}
               >
                 <Text style={recordScores.playerText}>
