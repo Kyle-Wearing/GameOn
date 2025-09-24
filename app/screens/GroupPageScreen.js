@@ -28,8 +28,8 @@ export function GroupsPageScreen({ route }) {
         const newMembers = group.map((member) => {
           return {
             username: member.username,
-            score: member.avg_elo,
-            wins: member.wins,
+            score: member.avg_elo || 0,
+            wins: member.wins || 0,
             user_id: member.user_id,
           };
         });
