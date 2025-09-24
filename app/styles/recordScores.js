@@ -120,4 +120,8 @@ export const recordScores = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
+  errorText: {
+    color: "red",
+    textAlign: "center",
+  },
 });

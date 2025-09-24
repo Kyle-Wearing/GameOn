@@ -308,9 +308,9 @@ export async function updateElo(players, group_id, game_id) {
     });
 }
 
-export async function setSessionScored(session_id) {
+export async function setSessionScored(session_id, scored) {
   return api
-    .put(`session/${session_id}`)
+    .put(`session/${session_id}`, { scored })
     .then((res) => {
       return res.data.status;
     })

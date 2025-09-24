@@ -22,6 +22,7 @@ export function RecordScoresScreen({ route }) {
   const [scoreInput, setScoreInput] = useState("");
   const [user_id, setuser_id] = useState("");
   const navigation = useNavigation();
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const newMembers = members.map((member) => {
@@ -67,24 +68,45 @@ export function RecordScoresScreen({ route }) {
   }
 
   async function handleSubmit() {
-    const updated = await setSessionScored(selectedSession.session_id);
-    if (updated) {
-      const membersToUpdate = memberArr.filter((member) => {
-        return member.score;
-      });
-      const sorted = membersToUpdate.sort((a, b) => b.score - a.score);
-      const calculatedScores = calculateEloChange(sorted);
-      calculatedScores.forEach((player) => {
-        scoreSession(
-          selectedSession.session_id,
-          player.user_id,
-          player.score,
-          player.position
-        );
-      });
-      updateElo(calculatedScores, id, selectedSession.game_id);
+    const membersToUpdate = memberArr.filter((member) => member.score);
+    if (!membersToUpdate.length) {
+      setError("At Least 1 Player Must Score");
+      return;
+    }
+    const updated = await setSessionScored(selectedSession.session_id, 1);
+
+    if (!updated) {
+      return;
+    }
+
+    const sorted = membersToUpdate.sort((a, b) => b.score - a.score);
+    const calculatedScores = calculateEloChange(sorted);
+
+    try {
+      await Promise.all(
+        calculatedScores.map((player) =>
+          scoreSession(
+            selectedSession.session_id,
+            player.user_id,
+            player.score,
+            player.position
+          )
+        )
+      );
+
+      const eloPayload = calculatedScores.map((player) => ({
+        group_id: id,
+        game_id: selectedSession.game_id,
+        user_id: player.user_id,
+        eloChange: player.eloChange,
+      }));
+
+      await updateElo(eloPayload, id, selectedSession.game_id);
 
       navigation.pop(1);
+    } catch {
+      setError("Something Went Wrong");
+      const updated = await setSessionScored(selectedSession.session_id, 0);
     }
   }
 
@@ -168,6 +190,7 @@ export function RecordScoresScreen({ route }) {
                 key={member.user_id}
                 style={recordScores.playerButton}
                 onPress={() => {
+                  setError("");
                   handlePress(member.user_id, member.username);
                 }}
               >
@@ -178,6 +201,7 @@ export function RecordScoresScreen({ route }) {
             );
           })}
         </ScrollView>
+        {error && <Text style={recordScores.errorText}>{error}</Text>}
         <Button
           title="confirm"
           onPress={() => {
