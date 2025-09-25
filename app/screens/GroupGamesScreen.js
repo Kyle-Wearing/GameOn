@@ -40,6 +40,10 @@ export function GroupGameScreen({ route }) {
     }
   }
 
+  function handlePress(game_name, game_id) {
+    navigation.navigate("GameRankingScreen", { game_name, game_id, id, name });
+  }
+
   useEffect(() => {
     getGroupGames(id).then((res) => {
       setGames(res);
@@ -103,7 +107,13 @@ export function GroupGameScreen({ route }) {
 
         <ScrollView style={{ paddingVertical: 10, flex: 1 }}>
           {games.map((game) => (
-            <TouchableOpacity key={game.game_id} style={gamesPage.gameItem}>
+            <TouchableOpacity
+              key={game.game_id}
+              style={gamesPage.gameItem}
+              onPress={() => {
+                handlePress(game.game_name, game.game_id);
+              }}
+            >
               <Text style={gamesPage.gameItemText}>{game.game_name}</Text>
             </TouchableOpacity>
           ))}

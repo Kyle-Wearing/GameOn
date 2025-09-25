@@ -15,6 +15,7 @@ import { GroupCalanderScreen } from "./groupCalenderScreen";
 import { RecordScoresScreen } from "./RecordScoresScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { GroupGameScreen } from "./GroupGamesScreen";
+import { GameRankingScreen } from "./GameRankingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -102,6 +103,11 @@ function MainContainer() {
         <Stack.Screen
           name="GroupGameScreen"
           component={GroupGameScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="GameRankingScreen"
+          component={GameRankingScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
