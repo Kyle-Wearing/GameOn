@@ -11,7 +11,7 @@ import * as Clipboard from "expo-clipboard";
 import { UserContext } from "../../userContext";
 
 function GroupSettingsScreen({ route }) {
-  const { groupName, group_id, setName } = route.params;
+  const { groupName, group_id } = route.params;
   const navigation = useNavigation();
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
@@ -21,7 +21,6 @@ function GroupSettingsScreen({ route }) {
     if (newName) {
       const update = await updateGroupSettings(group_id, newName);
       if (update === 200) {
-        setName(newName);
         navigation.pop();
       } else {
         setError("something went wrong");

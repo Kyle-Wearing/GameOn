@@ -81,6 +81,17 @@ export async function getGroupByGroupId(id) {
     });
 }
 
+export async function getGroupName(id) {
+  return api
+    .get(`groups/${id}/name`)
+    .then((res) => {
+      return res.data.items[0].name;
+    })
+    .catch((err) => {
+      console.log("get group name", err);
+    });
+}
+
 // export async function getGroupByGroupId(id) {
 //   return get(ref(db, `groups/-${id}`))
 //     .then((res) => {

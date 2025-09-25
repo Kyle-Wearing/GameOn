@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text } from "react-native";
-import { getGroupByGroupId } from "../../until";
+import { getGroupByGroupId, getGroupName } from "../../until";
 import { groupPage } from "../styles/groupPage";
 import { View } from "react-native";
 import {
@@ -24,6 +24,7 @@ export function GroupsPageScreen({ route }) {
     React.useCallback(() => {
       const getGroupData = async () => {
         const group = await getGroupByGroupId(id);
+        const groupName = await getGroupName(id);
         const newMembers = group.map((member) => {
           return {
             username: member.username,
@@ -33,6 +34,7 @@ export function GroupsPageScreen({ route }) {
           };
         });
         setMembers(newMembers);
+        setName(groupName);
       };
 
       getGroupData();
@@ -111,7 +113,6 @@ export function GroupsPageScreen({ route }) {
                 navigation.navigate("GroupSettingsScreen", {
                   groupName: name,
                   group_id: id,
-                  setName,
                 });
               }}
             >
