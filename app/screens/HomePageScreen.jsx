@@ -8,6 +8,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { homePage } from "../styles/homePage";
 import { TextInput } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import Loading from "./Loading";
 
 function HomePageScreen() {
   const { user } = useContext(UserContext);
@@ -15,10 +16,12 @@ function HomePageScreen() {
   const navigation = useNavigation();
   const [search, setSearch] = useState("");
   const [fullGroups, setFullGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const isFocused = useIsFocused();
 
   useEffect(() => {
+    setIsLoading(true);
     getGroupsByUID(user.uid).then((newGroups) => {
       if (newGroups.length) {
         setFullGroups(newGroups);
@@ -32,6 +35,7 @@ function HomePageScreen() {
         ]);
       }
     });
+    setIsLoading(false);
   }, [isFocused]);
 
   useEffect(() => {
@@ -91,21 +95,25 @@ function HomePageScreen() {
             />
           </View>
         </View>
-        <ScrollView style={homePage.scrollContainer}>
-          {groups.map((group) => {
-            return (
-              <TouchableOpacity
-                key={group.id}
-                style={homePage.groupButton}
-                onPress={() => {
-                  handlePress(group.id, group.name);
-                }}
-              >
-                <Text style={homePage.groupText}>{group.name}</Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+        {isLoading ? (
+          <Loading></Loading>
+        ) : (
+          <ScrollView style={homePage.scrollContainer}>
+            {groups.map((group) => {
+              return (
+                <TouchableOpacity
+                  key={group.id}
+                  style={homePage.groupButton}
+                  onPress={() => {
+                    handlePress(group.id, group.name);
+                  }}
+                >
+                  <Text style={homePage.groupText}>{group.name}</Text>
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+        )}
       </SafeAreaView>
     </SafeAreaProvider>
   );

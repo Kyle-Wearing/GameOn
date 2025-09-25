@@ -12,6 +12,7 @@ import { ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Loading from "./Loading";
 
 export function GroupsPageScreen({ route }) {
   const { id, group_name } = route.params;
@@ -19,9 +20,11 @@ export function GroupsPageScreen({ route }) {
   const [name, setName] = useState(group_name);
   const [members, setMembers] = useState([]);
   const isFocused = useIsFocused();
+  const [isLoading, setIsLoading] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
+      setIsLoading(true);
       const getGroupData = async () => {
         const group = await getGroupByGroupId(id);
         const groupName = await getGroupName(id);
@@ -38,6 +41,7 @@ export function GroupsPageScreen({ route }) {
       };
 
       getGroupData();
+      setIsLoading(false);
     }, [id])
   );
 
@@ -64,32 +68,38 @@ export function GroupsPageScreen({ route }) {
         <View style={groupPage.container}>
           <View style={groupPage.leaderboard}>
             <Text style={groupPage.leaderboardText}>leaderboard</Text>
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {members.map((member, index) => {
-                return (
-                  <View
-                    key={index}
-                    style={
-                      index === 0
-                        ? groupPage.memberCard0
-                        : index === 1
-                        ? groupPage.memberCard1
-                        : index === 2
-                        ? groupPage.memberCard2
-                        : groupPage.memberCard
-                    }
-                  >
-                    <Text style={groupPage.username}>
-                      {index + 1}: {member.username}
-                    </Text>
-                    <View style={groupPage.statsContainer}>
-                      <Text style={groupPage.score}>score: {member.score}</Text>
-                      <Text style={groupPage.score}>wins: {member.wins}</Text>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {members.map((member, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={
+                        index === 0
+                          ? groupPage.memberCard0
+                          : index === 1
+                          ? groupPage.memberCard1
+                          : index === 2
+                          ? groupPage.memberCard2
+                          : groupPage.memberCard
+                      }
+                    >
+                      <Text style={groupPage.username}>
+                        {index + 1}: {member.username}
+                      </Text>
+                      <View style={groupPage.statsContainer}>
+                        <Text style={groupPage.score}>
+                          score: {member.score}
+                        </Text>
+                        <Text style={groupPage.score}>wins: {member.wins}</Text>
+                      </View>
                     </View>
-                  </View>
-                );
-              })}
-            </ScrollView>
+                  );
+                })}
+              </ScrollView>
+            )}
           </View>
         </View>
         <View style={groupPage.buttonContainer}>
