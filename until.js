@@ -162,14 +162,14 @@ export async function checkInGroup(uid, group_id) {
 
 export async function updateGroupSettings(group_id, name) {
   return api
-    .put(`group/${group_id}`, {
+    .put(`groups/${group_id}`, {
       name,
     })
     .then((res) => {
       return 200;
     })
     .catch((err) => {
-      console.log("update group settings", err.message);
+      console.log("update group settings", err);
       return 400;
     });
 }

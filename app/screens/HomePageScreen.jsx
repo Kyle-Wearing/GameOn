@@ -55,13 +55,13 @@ function HomePageScreen() {
     }
   }, [search]);
 
-  function handlePress(id) {
+  function handlePress(id, group_name) {
     if (id === "to join groups") {
       navigation.navigate("GameOn", { screen: "Groups" });
     } else if (id === "empty search") {
       setSearch("");
     } else {
-      navigation.navigate("GroupScreen", { id });
+      navigation.navigate("GroupScreen", { id, group_name });
     }
   }
 
@@ -98,7 +98,7 @@ function HomePageScreen() {
                 key={group.id}
                 style={homePage.groupButton}
                 onPress={() => {
-                  handlePress(group.id);
+                  handlePress(group.id, group.name);
                 }}
               >
                 <Text style={homePage.groupText}>{group.name}</Text>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, Text } from "react-native";
-import { getAverageElo, getGroupByGroupId } from "../../until";
+import { getGroupByGroupId } from "../../until";
 import { groupPage } from "../styles/groupPage";
 import { View } from "react-native";
 import {
@@ -14,9 +14,9 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export function GroupsPageScreen({ route }) {
-  const { id } = route.params;
+  const { id, group_name } = route.params;
   const navigation = useNavigation();
-  const [name, setName] = useState("");
+  const [name, setName] = useState(group_name);
   const [members, setMembers] = useState([]);
   const isFocused = useIsFocused();
 
@@ -24,7 +24,6 @@ export function GroupsPageScreen({ route }) {
     React.useCallback(() => {
       const getGroupData = async () => {
         const group = await getGroupByGroupId(id);
-        setName(group[0].group_name);
         const newMembers = group.map((member) => {
           return {
             username: member.username,
@@ -111,8 +110,8 @@ export function GroupsPageScreen({ route }) {
               onPress={() => {
                 navigation.navigate("GroupSettingsScreen", {
                   groupName: name,
-                  groupMembers: members,
                   group_id: id,
+                  setName,
                 });
               }}
             >

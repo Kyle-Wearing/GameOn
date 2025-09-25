@@ -11,17 +11,17 @@ import * as Clipboard from "expo-clipboard";
 import { UserContext } from "../../userContext";
 
 function GroupSettingsScreen({ route }) {
-  const { groupName, groupMembers, group_id } = route.params;
+  const { groupName, group_id, setName } = route.params;
   const navigation = useNavigation();
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
-  const id = group_id;
   const { user } = useContext(UserContext);
 
   async function handleConfirm() {
     if (newName) {
-      const update = await updateGroupSettings(id, newName);
+      const update = await updateGroupSettings(group_id, newName);
       if (update === 200) {
+        setName(newName);
         navigation.pop();
       } else {
         setError("something went wrong");
@@ -70,7 +70,7 @@ function GroupSettingsScreen({ route }) {
       </View>
       {error ? <Text style={groupSettings.errorText}>{error}</Text> : null}
       <View style={groupSettings.codeContainer}>
-        <Text>{id}</Text>
+        <Text>{group_id}</Text>
         <TouchableOpacity
           style={groupSettings.backIcon}
           onPress={() => {
