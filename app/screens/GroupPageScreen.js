@@ -22,6 +22,10 @@ export function GroupsPageScreen({ route }) {
   const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
 
+  function handlePressUser(user_id, index) {
+    navigation.navigate("UserPerformance", { user_id, id, name, index });
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       setIsLoading(true);
@@ -42,7 +46,7 @@ export function GroupsPageScreen({ route }) {
       };
 
       getGroupData();
-    }, [id])
+    }, [isFocused])
   );
 
   return (
@@ -74,7 +78,10 @@ export function GroupsPageScreen({ route }) {
               <ScrollView showsVerticalScrollIndicator={false}>
                 {members.map((member, index) => {
                   return (
-                    <View
+                    <TouchableOpacity
+                      onPress={() => {
+                        handlePressUser(member.user_id, index);
+                      }}
                       key={index}
                       style={
                         index === 0
@@ -91,11 +98,11 @@ export function GroupsPageScreen({ route }) {
                       </Text>
                       <View style={groupPage.statsContainer}>
                         <Text style={groupPage.score}>
-                          score: {member.score}
+                          Rating: {member.score}
                         </Text>
-                        <Text style={groupPage.score}>wins: {member.wins}</Text>
+                        <Text style={groupPage.score}>Wins: {member.wins}</Text>
                       </View>
-                    </View>
+                    </TouchableOpacity>
                   );
                 })}
               </ScrollView>

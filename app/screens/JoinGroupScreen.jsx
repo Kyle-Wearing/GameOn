@@ -30,7 +30,7 @@ function JoinGroupScreen() {
 
   async function handleJoinGroup() {
     if (joinCode) {
-      const check = await checkInGroup(user.uid, joinCode);
+      const check = await checkInGroup(user.uid, joinCode.toUpperCase());
       if (!check) {
         joinGroupById(joinCode, user.uid)
           .then((status) => {

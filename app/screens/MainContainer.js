@@ -16,6 +16,7 @@ import { RecordScoresScreen } from "./RecordScoresScreen";
 import { LoadingScreen } from "./LoadingScreen";
 import { GroupGameScreen } from "./GroupGamesScreen";
 import { GameRankingScreen } from "./GameRankingScreen";
+import { UserPerformance } from "./UserPerformance";
 
 const Tab = createBottomTabNavigator();
 
@@ -108,6 +109,11 @@ function MainContainer() {
         <Stack.Screen
           name="GameRankingScreen"
           component={GameRankingScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="UserPerformance"
+          component={UserPerformance}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -21,7 +21,9 @@ export function GameRankingScreen({ route }) {
     });
   }, []);
 
-  function handlePressUser(user_id) {}
+  function handlePressUser(user_id, index) {
+    navigation.navigate("UserPerformance", { user_id, id, name, index });
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -54,7 +56,7 @@ export function GameRankingScreen({ route }) {
                 return (
                   <TouchableOpacity
                     onPress={() => {
-                      handlePressUser(member.user_id);
+                      handlePressUser(member.user_id, index);
                     }}
                     key={index}
                     style={
@@ -72,9 +74,11 @@ export function GameRankingScreen({ route }) {
                     </Text>
                     <View style={rankingPage.statsContainer}>
                       <Text style={rankingPage.score}>
-                        score: {member.avg_elo}
+                        score: {member.avg_elo || 0}
                       </Text>
-                      <Text style={rankingPage.score}>wins: {member.wins}</Text>
+                      <Text style={rankingPage.score}>
+                        wins: {member.wins || 0}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 );

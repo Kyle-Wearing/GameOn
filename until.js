@@ -340,3 +340,41 @@ export async function scoreSession(session_id, user_id, score, position) {
       console.log("score session", err);
     });
 }
+
+export async function getUserPerformance(user_id, group_id) {
+  try {
+    const response = await api.get(
+      `groups/${group_id}/users/${user_id}/performance`,
+      {
+        headers: {
+          Accept: "application/json", // ensure ORDS returns JSON
+        },
+      }
+    );
+    const parsedGames = JSON.parse(response.data.items[0].games);
+    const data = response.data.items[0];
+    const user = {
+      username: data.username,
+      avg_elo: data.total_avg_elo || 0,
+      wins: data.total_wins || 0,
+    };
+
+    let games = [];
+
+    if (parsedGames[0].game_name) {
+      games = parsedGames.map((game) => {
+        return {
+          game_name: game.game_name,
+          avg_elo: game.avg_elo,
+          highest_score: game.highest_score,
+          wins: game.wins,
+        };
+      });
+    }
+
+    return { user, games };
+  } catch (error) {
+    console.error("API request failed:", error.response || error);
+    return [];
+  }
+}
