@@ -13,6 +13,7 @@ import { gamesPage } from "../styles/gamesPage";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { createGame, getGroupGames } from "../../until";
+import Loading from "./Loading";
 
 export function GroupGameScreen({ route }) {
   const navigation = useNavigation();
@@ -21,6 +22,7 @@ export function GroupGameScreen({ route }) {
   const [newGameVisible, setNewGameVisible] = useState(false);
   const [newGameName, setNewGameName] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   async function handleNewGame() {
     if (newGameName) {
@@ -45,8 +47,10 @@ export function GroupGameScreen({ route }) {
   }
 
   useEffect(() => {
+    setIsLoading(true);
     getGroupGames(id).then((res) => {
       setGames(res);
+      setIsLoading(false);
     });
   }, []);
 
@@ -105,19 +109,23 @@ export function GroupGameScreen({ route }) {
           <Text style={gamesPage.addButtonText}>Add New Game</Text>
         </TouchableOpacity>
 
-        <ScrollView style={{ paddingVertical: 10, flex: 1 }}>
-          {games.map((game) => (
-            <TouchableOpacity
-              key={game.game_id}
-              style={gamesPage.gameItem}
-              onPress={() => {
-                handlePress(game.game_name, game.game_id);
-              }}
-            >
-              <Text style={gamesPage.gameItemText}>{game.game_name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <ScrollView style={{ paddingVertical: 10, flex: 1 }}>
+            {games.map((game) => (
+              <TouchableOpacity
+                key={game.game_id}
+                style={gamesPage.gameItem}
+                onPress={() => {
+                  handlePress(game.game_name, game.game_id);
+                }}
+              >
+                <Text style={gamesPage.gameItemText}>{game.game_name}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
       </View>
     </SafeAreaView>
   );

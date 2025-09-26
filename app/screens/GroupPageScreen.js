@@ -38,10 +38,10 @@ export function GroupsPageScreen({ route }) {
         });
         setMembers(newMembers);
         setName(groupName);
+        setIsLoading(false);
       };
 
       getGroupData();
-      setIsLoading(false);
     }, [id])
   );
 

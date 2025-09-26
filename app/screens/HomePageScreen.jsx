@@ -34,8 +34,8 @@ function HomePageScreen() {
           },
         ]);
       }
+      setIsLoading(false);
     });
-    setIsLoading(false);
   }, [isFocused]);
 
   useEffect(() => {
