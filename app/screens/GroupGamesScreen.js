@@ -12,7 +12,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { gamesPage } from "../styles/gamesPage";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
-import { createGame, getGroupGames } from "../../until";
+import {
+  addGameToGroup,
+  createGame,
+  getGames,
+  getGroupGames,
+} from "../../until";
 import Loading from "./Loading";
 
 export function GroupGameScreen({ route }) {
@@ -23,6 +28,9 @@ export function GroupGameScreen({ route }) {
   const [newGameName, setNewGameName] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [modalStep, setModalStep] = useState("select");
+  const [selectedGame, setSelectedGame] = useState({});
+  const [availableGames, setAvailableGames] = useState([]);
 
   async function handleNewGame() {
     if (newGameName) {
@@ -42,15 +50,48 @@ export function GroupGameScreen({ route }) {
     }
   }
 
+  async function handleAddGame() {
+    if (selectedGame.game_id) {
+      const added = await addGameToGroup(id, selectedGame.game_id);
+      if (added === 200) {
+        setGames((currGames) => {
+          currGames.push({
+            game_name: selectedGame.name,
+            game_id: selectedGame.game_id,
+          });
+          return currGames;
+        });
+        setAvailableGames((currGames) => {
+          return currGames.filter((game) => {
+            return game.game_id !== selectedGame.game_id;
+          });
+        });
+        setNewGameVisible(false);
+        setSelectedGame({});
+      }
+    } else {
+      setError("Must Select A Game");
+    }
+  }
+
   function handlePress(game_name, game_id) {
     navigation.navigate("GameRankingScreen", { game_name, game_id, id, name });
   }
 
   useEffect(() => {
     setIsLoading(true);
-    getGroupGames(id).then((res) => {
-      setGames(res);
+    getGroupGames(id).then((fetchedGames) => {
+      setGames(fetchedGames);
       setIsLoading(false);
+      getGames().then((res) => {
+        const idsToRemove = new Set(fetchedGames.map((game) => game.game_id));
+
+        const filteredGames = res.filter(
+          (game) => !idsToRemove.has(game.game_id)
+        );
+
+        setAvailableGames(filteredGames);
+      });
     });
   }, []);
 
@@ -77,27 +118,94 @@ export function GroupGameScreen({ route }) {
         <Modal animationType="none" transparent={true} visible={newGameVisible}>
           <View style={gamesPage.centeredView}>
             <View style={gamesPage.modalView}>
-              <Text>Enter New Game Name</Text>
-              <TextInput
-                style={gamesPage.input}
-                value={newGameName}
-                onChangeText={(text) => {
-                  setNewGameName(text);
-                  setError("");
-                }}
-                returnKeyType="done"
-                autoCapitalize="none"
-                autoCorrect={false}
-              ></TextInput>
-              {error ? <Text style={gamesPage.errorText}>{error}</Text> : null}
-              <Button title="Add Game" onPress={handleNewGame}></Button>
-              <Button
-                title="Back"
-                onPress={() => {
-                  setNewGameName("");
-                  setNewGameVisible(false);
-                }}
-              ></Button>
+              {modalStep === "select" ? (
+                <>
+                  <Text style={gamesPage.eventTitle}>Select Game</Text>
+                  <ScrollView style={gamesPage.modalGameList}>
+                    <TouchableOpacity
+                      style={gamesPage.modalGameItem}
+                      onPress={() => {
+                        setSelectedGame({});
+                        setError("");
+                        setModalStep("create");
+                      }}
+                    >
+                      <Text style={gamesPage.modalCreateNewGameText}>
+                        Create New Game?
+                      </Text>
+                    </TouchableOpacity>
+                    {availableGames.map((game) => {
+                      const isSelected = selectedGame.game_id === game.game_id;
+                      return (
+                        <TouchableOpacity
+                          key={game.game_id}
+                          style={[
+                            gamesPage.modalGameItem,
+                            isSelected && gamesPage.modalSelectedGameItem,
+                          ]}
+                          onPress={() => {
+                            setSelectedGame(game);
+                          }}
+                        >
+                          <Text
+                            style={[
+                              gamesPage.modalGameTitle,
+                              isSelected && gamesPage.modalSelectedGameTitle,
+                            ]}
+                          >
+                            {game.name}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </ScrollView>
+
+                  <Button title="Add Game To Group" onPress={handleAddGame} />
+                  {error ? (
+                    <Text style={gamesPage.errorText}>{error}</Text>
+                  ) : null}
+                  <Button
+                    title="Cancel"
+                    onPress={() => {
+                      setSelectedGame({});
+                      setNewGameVisible(false);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Text>Enter Name Of Game</Text>
+                  <TextInput
+                    style={gamesPage.input}
+                    value={newGameName}
+                    onChangeText={(text) => {
+                      setNewGameName(text);
+                      setError("");
+                    }}
+                    returnKeyType="done"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
+                  {error ? (
+                    <Text style={gamesPage.errorText}>{error}</Text>
+                  ) : null}
+                  <Button
+                    title="Add Game"
+                    onPress={() => {
+                      handleNewGame();
+                      setModalStep("select");
+                    }}
+                  />
+                  <Button
+                    title="Back"
+                    onPress={() => {
+                      setModalStep("select");
+                      setNewGameName("");
+                      setError("");
+                    }}
+                  />
+                </>
+              )}
             </View>
           </View>
         </Modal>
@@ -111,6 +219,18 @@ export function GroupGameScreen({ route }) {
 
         {isLoading ? (
           <Loading />
+        ) : !games.length ? (
+          <TouchableOpacity
+            key={"no games"}
+            style={gamesPage.gameItem}
+            onPress={() => {
+              setNewGameVisible(true);
+            }}
+          >
+            <Text style={gamesPage.gameItemText}>
+              {"Add Games To Group To Start Scoring"}
+            </Text>
+          </TouchableOpacity>
         ) : (
           <ScrollView style={{ paddingVertical: 10, flex: 1 }}>
             {games.map((game) => (

@@ -244,6 +244,17 @@ export async function createGame(group_id, name) {
     });
 }
 
+export async function addGameToGroup(group_id, game_id) {
+  return api
+    .post(`groups/${group_id}/games/${game_id}`)
+    .then((res) => {
+      return 200;
+    })
+    .catch((err) => {
+      console.log("add game to group", err);
+    });
+}
+
 export async function getGroupCalendar(group_id) {
   return api
     .get(`groups/${group_id}/calendar`)
@@ -377,4 +388,15 @@ export async function getUserPerformance(user_id, group_id) {
     console.error("API request failed:", error.response || error);
     return [];
   }
+}
+
+export async function getGames() {
+  return api
+    .get("games")
+    .then((res) => {
+      return res.data.items;
+    })
+    .catch((err) => {
+      console.log("get games", err);
+    });
 }

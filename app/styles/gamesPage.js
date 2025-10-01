@@ -91,4 +91,35 @@ export const gamesPage = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
+  modalGameList: {
+    maxHeight: 200,
+    marginTop: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    backgroundColor: "#fafafa",
+  },
+  modalGameItem: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  modalGameTitle: {
+    fontSize: 16,
+    color: "#333",
+  },
+  modalSelectedGameItem: {
+    backgroundColor: "#007AFF20",
+  },
+  modalSelectedGameTitle: {
+    color: "#007AFF",
+    fontWeight: "600",
+  },
+  modalCreateNewGameText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#007AFF",
+  },
 });
