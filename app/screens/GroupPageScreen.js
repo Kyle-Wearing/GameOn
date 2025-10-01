@@ -153,7 +153,7 @@ export function GroupsPageScreen({ route }) {
           <View style={groupPage.history}></View>
           <TouchableOpacity
             style={groupPage.button}
-            onPress={() => alert("to be added")}
+            onPress={() => navigation.navigate("GamesPlayed", { id, name })}
           >
             <Text style={groupPage.buttonText}>Game History</Text>
           </TouchableOpacity>

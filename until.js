@@ -400,3 +400,14 @@ export async function getGames() {
       console.log("get games", err);
     });
 }
+
+export async function getSessions(group_id) {
+  return api
+    .get(`groups/${group_id}/sessions`)
+    .then((res) => {
+      return res.data.items;
+    })
+    .catch((err) => {
+      console.log("get sessions", err);
+    });
+}
