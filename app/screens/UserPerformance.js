@@ -69,16 +69,18 @@ export const UserPerformance = ({ route }) => {
           </View>
 
           <ScrollView>
-            {userGames.map((item) => (
-              <View key={item.game_id} style={UserPerformancePage.gameCard}>
-                <Text style={UserPerformancePage.gameName}>
-                  {item.game_name}
-                </Text>
-                <Text>Rating: {item.avg_elo}</Text>
-                <Text>Wins: {item.wins}</Text>
-                <Text>High Score: {item.highest_score}</Text>
-              </View>
-            ))}
+            {userGames.map((item, index) => {
+              return (
+                <View key={index} style={UserPerformancePage.gameCard}>
+                  <Text style={UserPerformancePage.gameName}>
+                    {item.game_name}
+                  </Text>
+                  <Text>Rating: {item.avg_elo}</Text>
+                  <Text>Wins: {item.wins}</Text>
+                  <Text>High Score: {item.highest_score}</Text>
+                </View>
+              );
+            })}
           </ScrollView>
         </View>
       )}
