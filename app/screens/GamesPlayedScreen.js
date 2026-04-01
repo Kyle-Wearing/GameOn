@@ -47,19 +47,25 @@ export function GamesPlayedScreen({ route }) {
         <ScrollView style={gamesPlayed.container}>
           {sessions.map((session) => {
             const date = session.played_at.split("-").reverse().join("/");
+            const gameName = session.game_name;
+            const session_id = session.session_id;
             return (
               <TouchableOpacity
                 key={session.session_id}
                 onPress={() => {
-                  navigation.navigate("GameScores", { id, name });
+                  navigation.navigate("GameScores", {
+                    id,
+                    name,
+                    date,
+                    gameName,
+                    session_id,
+                  });
                 }}
                 style={
                   session.scored ? gamesPlayed.scoredCard : gamesPlayed.card
                 }
               >
-                <Text style={gamesPlayed.gameName}>
-                  Game: {session.game_name}
-                </Text>
+                <Text style={gamesPlayed.gameName}>Game: {gameName}</Text>
                 <Text style={gamesPlayed.date}>Date: {date}</Text>
               </TouchableOpacity>
             );

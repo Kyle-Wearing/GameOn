@@ -360,7 +360,7 @@ export async function getUserPerformance(user_id, group_id) {
         headers: {
           Accept: "application/json", // ensure ORDS returns JSON
         },
-      }
+      },
     );
     const parsedGames = JSON.parse(response.data.items[0].games);
     const data = response.data.items[0];
@@ -409,5 +409,16 @@ export async function getSessions(group_id) {
     })
     .catch((err) => {
       console.log("get sessions", err);
+    });
+}
+
+export async function getGameScores(session_id) {
+  return api
+    .get(`session/${session_id}`)
+    .then((res) => {
+      return res.data.items;
+    })
+    .catch((err) => {
+      console.log("get game scores", err);
     });
 }
