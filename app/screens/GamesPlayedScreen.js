@@ -50,6 +50,9 @@ export function GamesPlayedScreen({ route }) {
             return (
               <TouchableOpacity
                 key={session.session_id}
+                onPress={() => {
+                  navigation.navigate("GameScores", { id, name });
+                }}
                 style={
                   session.scored ? gamesPlayed.scoredCard : gamesPlayed.card
                 }
