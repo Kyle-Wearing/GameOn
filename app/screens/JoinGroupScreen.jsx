@@ -15,6 +15,15 @@ function JoinGroupScreen() {
   const { user, setUser } = useContext(UserContext);
   const [error, setError] = useState("");
   const navigation = useNavigation();
+  const userIds = [
+    "Jsnvv9TCl5Ty5U8MNjAyEPoKqCD2",
+    "ziiu87hEKRPwzgP1TOz7ifJqqUb2",
+    "vMnSS81jnNOQJvjiFb01NIATBnX2",
+    "T9RA2mIiMYghuaN71WAUymsvv143",
+    "hrMoevplNDbrQvbFUlY9hDRUUic2",
+    "RXVFra1ffzYTm0n0XGtlScc3sX92",
+    "r8GyWuk0joTQPDUwP14EHRtJ52m1",
+  ];
 
   function handleCreateModal() {
     setGroupName("");
@@ -51,6 +60,33 @@ function JoinGroupScreen() {
       }
     } else {
       setError("must enter a join code");
+    }
+  }
+
+  async function handleAdminCreate() {
+    if (!groupName) {
+      setError("must enter a group name");
+      return;
+    }
+
+    try {
+      const group_id = await createGroup(user.uid, groupName);
+
+      if (!group_id) {
+        setError("something went wrong");
+        return;
+      }
+
+      await Promise.all(userIds.map((id) => joinGroupById(group_id, id)));
+
+      setCreateVisible(false);
+
+      navigation.navigate("GameOn", {
+        screen: "Home",
+      });
+    } catch (err) {
+      console.log(err);
+      setError("something went wrong");
     }
   }
 
@@ -112,6 +148,10 @@ function JoinGroupScreen() {
             />
             {error ? <Text style={joinGroup.errorText}>{error}</Text> : null}
             <Button title="create group" onPress={handleCreateGroup}></Button>
+            {user.uid === "gRumFtfuO5f8Y3km2cJ18WXXyp82" ||
+            "hidlztouP2gC3r6MfNTEkZM0Cka2" ? (
+              <Button title="Admin Button" onPress={handleAdminCreate}></Button>
+            ) : null}
             <Button title="back" onPress={handleCreateModal}></Button>
           </View>
         </View>
