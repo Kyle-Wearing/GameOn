@@ -61,7 +61,12 @@ const NavTab = () => {
 function MainContainer() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="LoadingScreen">
+      <Stack.Navigator
+        initialRouteName="LoadingScreen"
+        screenOptions={{
+          gestureEnabled: false,
+        }}
+      >
         <Stack.Screen
           name="LoadingScreen"
           component={LoadingScreen}
