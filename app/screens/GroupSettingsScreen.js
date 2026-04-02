@@ -36,7 +36,7 @@ function GroupSettingsScreen({ route }) {
   }
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(id);
+    await Clipboard.setStringAsync(group_id);
   };
 
   return (
