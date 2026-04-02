@@ -193,9 +193,9 @@ export async function updateGroupSettings(group_id, name) {
 //   });
 // }
 
-export async function updateUsername(uid, username) {
+export async function updateUser(uid, username, avatar_url) {
   return api
-    .put(`users/${uid}`, { username })
+    .put(`users/${uid}`, { username, avatar_url })
     .then((res) => {
       return 200;
     })
@@ -422,3 +422,32 @@ export async function getGameScores(session_id) {
       console.log("get game scores", err);
     });
 }
+
+export const uploadToCloudinary = async (imageUri) => {
+  const formData = new FormData();
+
+  formData.append("file", {
+    uri: imageUri,
+    type: "image/jpeg",
+    name: "avatar.jpg",
+  });
+
+  formData.append("upload_preset", "avatars");
+
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dt32bq0kk/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await res.json();
+
+    return data.secure_url;
+  } catch (err) {
+    console.log("Cloudinary error:", err);
+    return null;
+  }
+};

@@ -19,8 +19,13 @@ export function LoadingScreen() {
     try {
       const fetchedUserUid = await AsyncStorage.getItem("USERID");
       const fetchedUserName = await AsyncStorage.getItem("USERNAME");
+      const fetchedAvatar = await AsyncStorage.getItem("AVATARURL");
       if (fetchedUserUid && fetchedUserName) {
-        setUser({ uid: fetchedUserUid, username: fetchedUserName });
+        setUser({
+          uid: fetchedUserUid,
+          username: fetchedUserName,
+          avatar_url: fetchedAvatar || null,
+        });
         setTimeout(() => {
           navigation.navigate("GameOn");
         }, 1000);

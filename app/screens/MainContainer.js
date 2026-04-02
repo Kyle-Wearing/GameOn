@@ -26,7 +26,7 @@ const Stack = createNativeStackNavigator();
 
 const NavTab = () => {
   const homeName = "Home";
-  const userPageName = "User";
+  const userPageName = "Profile";
   const joinGroupName = "Groups";
   return (
     <Tab.Navigator

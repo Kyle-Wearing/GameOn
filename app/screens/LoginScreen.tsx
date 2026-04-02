@@ -22,7 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import { UserContext } from "../../userContext";
 
 function LoginScreen() {
-  //"test@test.com"
+  //"test2@test.com"
   //"123456"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
