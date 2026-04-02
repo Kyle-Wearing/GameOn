@@ -81,18 +81,27 @@ export const groupPage = StyleSheet.create({
     elevation: 5,
   },
 
+  // --- New leaderboard layout ---
+  cardContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginLeft: 10,
+  },
   username: {
     fontSize: 18,
     fontWeight: "bold",
     marginBottom: 5,
   },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   score: {
     fontSize: 14,
     color: "#333",
+    marginVertical: 1,
   },
 
   buttonContainer: {

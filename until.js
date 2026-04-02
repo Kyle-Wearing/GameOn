@@ -366,6 +366,7 @@ export async function getUserPerformance(user_id, group_id) {
     const data = response.data.items[0];
     const user = {
       username: data.username,
+      avatar_url: data.avatar_url,
       avg_elo: data.total_avg_elo || 0,
       wins: data.total_wins || 0,
     };

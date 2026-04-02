@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { rankingPage } from "../styles/rankingPage";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { getElo } from "../../until";
 import Loading from "./Loading";
+
+const DEFAULT_AVATAR = require("../assets/DefaultUserIcon.jpg");
 
 export function GameRankingScreen({ route }) {
   const { id, game_id, game_name, name } = route.params;
@@ -19,7 +21,7 @@ export function GameRankingScreen({ route }) {
       setMembers(res);
       setIsLoading(false);
     });
-  }, []);
+  }, [isFocused]);
 
   function handlePressUser(user_id, index) {
     navigation.navigate("UserPerformance", { user_id, id, name, index });
@@ -30,59 +32,63 @@ export function GameRankingScreen({ route }) {
       <View style={rankingPage.header}>
         <TouchableOpacity
           style={rankingPage.backIcon}
-          onPress={() => {
-            navigation.pop();
-          }}
+          onPress={() => navigation.pop()}
         >
-          <Ionicons
-            name="chevron-back-outline"
-            size={30}
-            color="black"
-          ></Ionicons>
+          <Ionicons name="chevron-back-outline" size={30} color="black" />
         </TouchableOpacity>
         <View style={rankingPage.title}>
           <Text style={rankingPage.titleText}>{name}</Text>
         </View>
       </View>
-      <Text style={rankingPage.titleText}>{game_name}</Text>
+
+      <Text style={[rankingPage.titleText, { marginVertical: 10 }]}>
+        {game_name}
+      </Text>
+
       <View style={rankingPage.container}>
         <View style={rankingPage.leaderboard}>
-          <Text style={rankingPage.leaderboardText}>leaderboard</Text>
+          <Text style={rankingPage.leaderboardText}>Leaderboard</Text>
           {isLoading ? (
             <Loading />
           ) : (
             <ScrollView showsVerticalScrollIndicator={false}>
-              {members.map((member, index) => {
-                return (
-                  <TouchableOpacity
-                    onPress={() => {
-                      handlePressUser(member.user_id, index);
-                    }}
-                    key={index}
-                    style={
-                      index === 0
-                        ? rankingPage.memberCard0
-                        : index === 1
+              {members.map((member, index) => (
+                <TouchableOpacity
+                  onPress={() => handlePressUser(member.user_id, index)}
+                  key={index}
+                  style={
+                    index === 0
+                      ? rankingPage.memberCard0
+                      : index === 1
                         ? rankingPage.memberCard1
                         : index === 2
-                        ? rankingPage.memberCard2
-                        : rankingPage.memberCard
-                    }
-                  >
-                    <Text style={rankingPage.username}>
-                      {index + 1}: {member.username}
-                    </Text>
-                    <View style={rankingPage.statsContainer}>
-                      <Text style={rankingPage.score}>
-                        score: {member.avg_elo || 0}
+                          ? rankingPage.memberCard2
+                          : rankingPage.memberCard
+                  }
+                >
+                  <View style={rankingPage.cardContent}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={rankingPage.username}>
+                        {index + 1}: {member.username}
                       </Text>
                       <Text style={rankingPage.score}>
-                        wins: {member.wins || 0}
+                        Score: {member.avg_elo || 0}
+                      </Text>
+                      <Text style={rankingPage.score}>
+                        Wins: {member.wins || 0}
                       </Text>
                     </View>
-                  </TouchableOpacity>
-                );
-              })}
+                    <Image
+                      source={
+                        member.avatar_url
+                          ? { uri: member.avatar_url }
+                          : DEFAULT_AVATAR
+                      }
+                      style={rankingPage.avatar}
+                    />
+                  </View>
+                </TouchableOpacity>
+              ))}
             </ScrollView>
           )}
         </View>
