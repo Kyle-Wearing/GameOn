@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./app/assets/GameOnScreen.jpg",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "splash": {
       "image": "./app/assets/GameOnScreen.jpg",
       "resizeMode": "contain",
