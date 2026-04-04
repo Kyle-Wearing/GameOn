@@ -29,10 +29,22 @@ export default function UserPageScreen() {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  const logOut = async () => {
-    await AsyncStorage.multiRemove(["USERID", "USERNAME", "AVATARURL"]);
-    setUser({});
-    navigation.navigate("LogIn");
+  const logOut = () => {
+    Alert.alert("Log Out", "Are you sure you want to log out?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Log Out",
+        style: "destructive",
+        onPress: async () => {
+          await AsyncStorage.multiRemove(["USERID", "USERNAME", "AVATARURL"]);
+          setUser({});
+          navigation.navigate("LogIn");
+        },
+      },
+    ]);
   };
 
   const handleConfirmUsername = async () => {
