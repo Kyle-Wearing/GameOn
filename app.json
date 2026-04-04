@@ -15,7 +15,12 @@
     "ios": {
       "googleServicesFile": "./googleService-Info.plist",
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.GameOn"
+      "bundleIdentifier": "com.anonymous.GameOn",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow access to your photos to upload images",
+        "NSCameraUsageDescription": "Allow access to your camera to take photos",
+        "NSPhotoLibraryAddUsageDescription": "Allow saving photos to your library"
+      }
     },
     "android": {
       "googleServicesFile": "google-services.json",
