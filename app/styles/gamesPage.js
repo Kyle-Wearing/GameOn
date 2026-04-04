@@ -8,21 +8,27 @@ export const gamesPage = StyleSheet.create({
     paddingTop: 10,
   },
   header: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
+    height: 60,
+    justifyContent: "center",
   },
+
+  backIcon: {
+    position: "absolute",
+    left: 10,
+    zIndex: 1,
+  },
+
   title: {
     position: "absolute",
-    left: "50%",
-    transform: [{ translateX: "-50%" }],
+    left: 0,
+    right: 0,
+    alignItems: "center",
   },
+
   titleText: {
-    fontSize: 25,
     textAlign: "center",
-  },
-  backIcon: {
-    padding: 10,
+    fontSize: 18,
+    fontWeight: "bold",
   },
   input: {
     height: 50,
