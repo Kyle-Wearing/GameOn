@@ -28,6 +28,7 @@ export const homePage = StyleSheet.create({
     fontWeight: "500",
     color: "#333",
     textAlign: "center",
+    flex: 1,
   },
   titleText: {
     fontSize: 24,

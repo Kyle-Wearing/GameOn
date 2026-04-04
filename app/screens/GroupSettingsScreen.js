@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Button } from "react-native";
+import { Alert, Button } from "react-native";
 import { Text, SafeAreaView, TextInput } from "react-native";
 import { leaveGroup, updateGroupSettings } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -31,8 +31,30 @@ function GroupSettingsScreen({ route }) {
   }
 
   function handleLeave() {
-    leaveGroup(user.uid, group_id);
-    navigation.pop(2);
+    Alert.alert(
+      "Leave Group",
+      "Are you sure you want to leave this group?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Leave",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await leaveGroup(user.uid, group_id);
+              navigation.pop(2);
+            } catch (err) {
+              console.log("Leave group error:", err);
+              Alert.alert("Error", "Failed to leave group.");
+            }
+          },
+        },
+      ],
+      { cancelable: true },
+    );
   }
 
   const copyToClipboard = async () => {
@@ -79,8 +101,8 @@ function GroupSettingsScreen({ route }) {
           <Ionicons name="copy-outline" size={15} color="black"></Ionicons>
         </TouchableOpacity>
       </View>
-      <Button title="confirm changes" onPress={handleConfirm}></Button>
-      <Button title="leave group" onPress={handleLeave}></Button>
+      <Button title="Confirm Changes" onPress={handleConfirm}></Button>
+      <Button title="Leave Group" onPress={handleLeave} color={"red"}></Button>
     </SafeAreaView>
   );
 }

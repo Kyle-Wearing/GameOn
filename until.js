@@ -452,3 +452,14 @@ export const uploadToCloudinary = async (imageUri) => {
     return null;
   }
 };
+
+export async function pinGroup(uid, group_id) {
+  return api
+    .put(`groups/${group_id}/members/${uid}`)
+    .then((res) => {
+      return;
+    })
+    .catch((err) => {
+      console.log("pin group", err);
+    });
+}
