@@ -89,9 +89,10 @@ export function RecordScoresScreen({ route }) {
             selectedSession.session_id,
             player.user_id,
             player.score,
-            player.position
-          )
-        )
+            player.position,
+            player.eloChange,
+          ),
+        ),
       );
 
       const eloPayload = calculatedScores.map((player) => ({

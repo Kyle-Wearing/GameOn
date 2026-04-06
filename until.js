@@ -341,9 +341,20 @@ export async function setSessionScored(session_id, scored) {
     });
 }
 
-export async function scoreSession(session_id, user_id, score, position) {
+export async function scoreSession(
+  session_id,
+  user_id,
+  score,
+  position,
+  eloChange,
+) {
   return api
-    .post(`session/${session_id}`, { user_id, score, position })
+    .post(`session/${session_id}`, {
+      user_id,
+      score,
+      position,
+      elo_change: Number(eloChange),
+    })
     .then((res) => {
       return res.data;
     })
