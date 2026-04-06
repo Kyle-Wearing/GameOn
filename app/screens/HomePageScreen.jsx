@@ -7,17 +7,15 @@ import {
   TextInput,
   Alert,
   LayoutAnimation,
-  Platform,
-  UIManager,
 } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { getGroupsByUID, pinGroup } from "../../until";
 import { UserContext } from "../../userContext";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
-import { homePage } from "../styles/homePage";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Loading from "./Loading";
 import * as Haptics from "expo-haptics";
+import { homePage } from "../styles/homePage";
 
 function HomePageScreen() {
   const { user } = useContext(UserContext);
@@ -117,31 +115,12 @@ function HomePageScreen() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={homePage.container}>
-        <Text style={homePage.titleText}>Your Groups</Text>
-
-        <View style={homePage.searchBar}>
-          <View style={homePage.input}>
-            <TouchableOpacity style={homePage.iconButton}>
-              <Ionicons name="search-outline" size={20} color="black" />
-            </TouchableOpacity>
-
-            <TextInput
-              style={{ fontSize: 16, flex: 1 }}
-              placeholder="Search"
-              value={search}
-              onChangeText={(text) => setSearch(text)}
-              returnKeyType="done"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-        </View>
-
+        <Text style={homePage.title}>Your Groups</Text>
         {isLoading ? (
           <Loading />
         ) : (
           <>
-            <View style={homePage.statsContainer}>
+            <View style={homePage.statsRow}>
               <View style={homePage.statCard}>
                 <Text style={homePage.statNumber}>{fullGroups.length}</Text>
                 <Text style={homePage.statLabel}>Groups</Text>
@@ -159,39 +138,40 @@ function HomePageScreen() {
                 <Text style={homePage.statLabel}>Shown</Text>
               </View>
             </View>
-            <ScrollView style={homePage.scrollContainer}>
+            <View style={homePage.searchBar}>
+              <Ionicons name="search-outline" size={18} color="#777" />
+              <TextInput
+                placeholder="Search groups..."
+                value={search}
+                onChangeText={setSearch}
+                style={{ flex: 1, marginLeft: 10 }}
+              />
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
               {groups.map((group) => {
-                const isFake =
-                  group.id === "to join groups" || group.id === "empty search";
-
                 return (
                   <TouchableOpacity
                     key={group.id}
-                    style={homePage.groupButton}
+                    style={[
+                      homePage.groupCard,
+                      group.is_pinned === 1 && homePage.pinnedCard,
+                    ]}
                     onPress={() => handlePress(group.id, group.name)}
                   >
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Ionicons name="people-outline" size={18} color="#555" />
-                      <Text style={homePage.groupText}>{group.name}</Text>
-
-                      {!isFake && (
-                        <TouchableOpacity onPress={() => handlePin(group.id)}>
-                          <Ionicons
-                            name={
-                              group.is_pinned === 1 ? "star" : "star-outline"
-                            }
-                            size={20}
-                            color="blue"
-                          />
-                        </TouchableOpacity>
-                      )}
+                    <View style={homePage.groupLeft}>
+                      <Ionicons name="people-outline" size={20} color="#555" />
+                      <Text style={homePage.groupName}>{group.name}</Text>
                     </View>
+
+                    {group.id.length < 7 && (
+                      <TouchableOpacity onPress={() => handlePin(group.id)}>
+                        <Ionicons
+                          name={group.is_pinned === 1 ? "star" : "star-outline"}
+                          size={20}
+                          color={group.is_pinned === 1 ? "#4f8cff" : "#aaa"}
+                        />
+                      </TouchableOpacity>
+                    )}
                   </TouchableOpacity>
                 );
               })}
