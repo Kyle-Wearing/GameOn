@@ -11,7 +11,6 @@ export function GamesPlayedScreen({ route }) {
   const { id, name } = route.params;
   const navigation = useNavigation();
   const [sessions, setSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -45,31 +44,35 @@ export function GamesPlayedScreen({ route }) {
         <Loading />
       ) : (
         <ScrollView style={gamesPlayed.container}>
-          {sessions.map((session) => {
-            const date = session.played_at.split("-").reverse().join("/");
-            const gameName = session.game_name;
-            const session_id = session.session_id;
-            return (
-              <TouchableOpacity
-                key={session.session_id}
-                onPress={() => {
-                  navigation.navigate("GameScores", {
-                    id,
-                    name,
-                    date,
-                    gameName,
-                    session_id,
-                  });
-                }}
-                style={
-                  session.scored ? gamesPlayed.scoredCard : gamesPlayed.card
-                }
-              >
-                <Text style={gamesPlayed.gameName}>Game: {gameName}</Text>
-                <Text style={gamesPlayed.date}>Date: {date}</Text>
-              </TouchableOpacity>
-            );
-          })}
+          {sessions.length ? (
+            sessions.map((session) => {
+              const date = session.played_at.split("-").reverse().join("/");
+              const gameName = session.game_name;
+              const session_id = session.session_id;
+              return (
+                <TouchableOpacity
+                  key={session.session_id}
+                  onPress={() => {
+                    navigation.navigate("GameScores", {
+                      id,
+                      name,
+                      date,
+                      gameName,
+                      session_id,
+                    });
+                  }}
+                  style={
+                    session.scored ? gamesPlayed.scoredCard : gamesPlayed.card
+                  }
+                >
+                  <Text style={gamesPlayed.gameName}>Game: {gameName}</Text>
+                  <Text style={gamesPlayed.date}>Date: {date}</Text>
+                </TouchableOpacity>
+              );
+            })
+          ) : (
+            <Text style={gamesPlayed.card}>No Games Have Been Played Yet</Text>
+          )}
         </ScrollView>
       )}
     </SafeAreaView>

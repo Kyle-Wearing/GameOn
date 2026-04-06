@@ -13,15 +13,19 @@ export const homePage = StyleSheet.create({
   },
   groupButton: {
     backgroundColor: "#dfdbdbff",
-    padding: 15,
+    padding: 16,
     marginBottom: 10,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
     borderColor: "#b5b3b3",
     marginLeft: width * 0.03,
     marginRight: width * 0.03,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
   },
   groupText: {
     fontSize: 16,
@@ -52,5 +56,33 @@ export const homePage = StyleSheet.create({
   },
   searchBar: {
     alignItems: "center",
+  },
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
+  },
+
+  statCard: {
+    backgroundColor: "#f5f5f5",
+    padding: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    width: width * 0.28,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+
+  statNumber: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#222",
+  },
+
+  statLabel: {
+    fontSize: 12,
+    color: "#666",
   },
 });

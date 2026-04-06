@@ -17,6 +17,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { homePage } from "../styles/homePage";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import Loading from "./Loading";
+import * as Haptics from "expo-haptics";
 
 function HomePageScreen() {
   const { user } = useContext(UserContext);
@@ -80,6 +81,7 @@ function HomePageScreen() {
   }
 
   const handlePin = async (groupId) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     const prevGroups = groups;
     const prevFullGroups = fullGroups;
 
@@ -138,40 +140,63 @@ function HomePageScreen() {
         {isLoading ? (
           <Loading />
         ) : (
-          <ScrollView style={homePage.scrollContainer}>
-            {groups.map((group) => {
-              const isFake =
-                group.id === "to join groups" || group.id === "empty search";
+          <>
+            <View style={homePage.statsContainer}>
+              <View style={homePage.statCard}>
+                <Text style={homePage.statNumber}>{fullGroups.length}</Text>
+                <Text style={homePage.statLabel}>Groups</Text>
+              </View>
 
-              return (
-                <TouchableOpacity
-                  key={group.id}
-                  style={homePage.groupButton}
-                  onPress={() => handlePress(group.id, group.name)}
-                >
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
+              <View style={homePage.statCard}>
+                <Text style={homePage.statNumber}>
+                  {fullGroups.filter((g) => g.is_pinned === 1).length}
+                </Text>
+                <Text style={homePage.statLabel}>Pinned</Text>
+              </View>
+
+              <View style={homePage.statCard}>
+                <Text style={homePage.statNumber}>{groups.length}</Text>
+                <Text style={homePage.statLabel}>Shown</Text>
+              </View>
+            </View>
+            <ScrollView style={homePage.scrollContainer}>
+              {groups.map((group) => {
+                const isFake =
+                  group.id === "to join groups" || group.id === "empty search";
+
+                return (
+                  <TouchableOpacity
+                    key={group.id}
+                    style={homePage.groupButton}
+                    onPress={() => handlePress(group.id, group.name)}
                   >
-                    <Text style={homePage.groupText}>{group.name}</Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Ionicons name="people-outline" size={18} color="#555" />
+                      <Text style={homePage.groupText}>{group.name}</Text>
 
-                    {!isFake && (
-                      <TouchableOpacity onPress={() => handlePin(group.id)}>
-                        <Ionicons
-                          name={group.is_pinned === 1 ? "star" : "star-outline"}
-                          size={20}
-                          color="blue"
-                        />
-                      </TouchableOpacity>
-                    )}
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
+                      {!isFake && (
+                        <TouchableOpacity onPress={() => handlePin(group.id)}>
+                          <Ionicons
+                            name={
+                              group.is_pinned === 1 ? "star" : "star-outline"
+                            }
+                            size={20}
+                            color="blue"
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </>
         )}
       </SafeAreaView>
     </SafeAreaProvider>

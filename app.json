@@ -2,7 +2,7 @@
   "expo": {
     "name": "GameOn",
     "slug": "GameOn",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./app/assets/GameOnScreen.jpg",
     "userInterfaceStyle": "light",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./app/assets/GameOnScreen.jpg",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2d9090"
     },
     "ios": {
       "googleServicesFile": "./googleService-Info.plist",
@@ -41,7 +41,9 @@
             "useFrameworks": "static"
           }
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font"
     ]
   }
 }
