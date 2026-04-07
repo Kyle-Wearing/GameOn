@@ -4,19 +4,13 @@
       "color": {
         "components": {
           "alpha": "1.000",
-          "blue": "1.00000000000000",
-          "green": "1.00000000000000",
-          "red": "1.00000000000000"
+          "blue": "0.564705882352941",
+          "green": "0.564705882352941",
+          "red": "0.176470588235294"
         },
         "color-space": "srgb"
       },
-      "idiom": "universal",
-      "appearances": [
-        {
-          "appearance": "luminosity",
-          "value": "light"
-        }
-      ]
+      "idiom": "universal"
     }
   ],
   "info": {
