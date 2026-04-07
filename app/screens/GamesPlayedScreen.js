@@ -46,7 +46,7 @@ export function GamesPlayedScreen({ route }) {
         <ScrollView style={gamesPlayed.container}>
           {sessions.length ? (
             sessions.map((session) => {
-              const date = session.played_at.split("-").reverse().join("/");
+              const date = new Date(session.played_at).toLocaleString();
               const gameName = session.game_name;
               const session_id = session.session_id;
               return (

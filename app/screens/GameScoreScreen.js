@@ -10,10 +10,14 @@ export function GameScoreScreen({ route }) {
   const { id, name, date, gameName, session_id } = route.params;
   const navigation = useNavigation();
   const [gameScores, setGameScores] = useState([]);
+  const [playedAt, setPlayedAt] = useState(date);
 
   useEffect(() => {
     getGameScores(session_id).then((scores) => {
       setGameScores(scores);
+
+      const formatedDate = new Date(scores[0].played_at);
+      setPlayedAt(formatedDate.toLocaleString());
     });
   }, []);
 
@@ -38,7 +42,7 @@ export function GameScoreScreen({ route }) {
       </View>
       <View style={gameScore.card}>
         <Text style={gameScore.gameName}>{gameName}</Text>
-        <Text style={gameScore.date}>{date}</Text>
+        <Text style={gameScore.date}>{playedAt}</Text>
 
         {gameScores.length ? (
           gameScores.map((score, index) => {
