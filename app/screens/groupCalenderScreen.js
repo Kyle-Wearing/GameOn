@@ -5,7 +5,6 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
-
 import {
   createGame,
   getGroupCalendar,
@@ -33,13 +32,13 @@ export function GroupCalanderScreen({ route }) {
   function removeSessionFromSelectedDay(
     grouped,
     selectedDate,
-    sessionIdToRemove
+    sessionIdToRemove,
   ) {
     const updated = { ...grouped };
 
     if (updated[selectedDate]) {
       updated[selectedDate] = updated[selectedDate].filter(
-        (session) => session.session_id !== sessionIdToRemove
+        (session) => session.session_id !== sessionIdToRemove,
       );
 
       if (updated[selectedDate].length === 0) {
@@ -56,7 +55,7 @@ export function GroupCalanderScreen({ route }) {
       const newSavedGames = removeSessionFromSelectedDay(
         savedGames,
         selected,
-        deletedSessionId
+        deletedSessionId,
       );
       setSavedGames(newSavedGames);
       setModalVisible(false);
@@ -232,7 +231,21 @@ export function GroupCalanderScreen({ route }) {
                 ></Button>
                 <Button title="record scores" onPress={handleScore}></Button>
               </>
-            ) : null}
+            ) : (
+              <Button
+                title="View Game Scores"
+                onPress={() => {
+                  setModalVisible(false);
+                  navigation.navigate("GameScores", {
+                    id,
+                    name,
+                    date: selected,
+                    gameName: selectedSession.session_gameName,
+                    session_id: selectedSession.session_id,
+                  });
+                }}
+              ></Button>
+            )}
             <Button
               title="cancel"
               onPress={() => {

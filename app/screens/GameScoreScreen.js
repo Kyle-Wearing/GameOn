@@ -1,4 +1,4 @@
-import { SafeAreaView, TouchableOpacity, View } from "react-native";
+import { Button, SafeAreaView, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
@@ -57,7 +57,9 @@ export function GameScoreScreen({ route }) {
             );
           })
         ) : (
-          <Text style={gameScore.noScores}>No scores yet</Text>
+          <Text style={gameScore.noScores}>
+            This Game Has Not Been Scored Yet
+          </Text>
         )}
       </View>
     </SafeAreaView>
