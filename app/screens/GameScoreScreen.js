@@ -43,23 +43,40 @@ export function GameScoreScreen({ route }) {
       <View style={gameScore.card}>
         <Text style={gameScore.gameName}>{gameName}</Text>
         <Text style={gameScore.date}>{playedAt}</Text>
+        <View style={gameScore.headerRow}>
+          <Text style={gameScore.headerPosition}>#</Text>
+          <Text style={gameScore.headerUsername}>Player</Text>
+          <Text style={gameScore.headerScore}>Score</Text>
+          <Text style={gameScore.headerElo}>ELO</Text>
+        </View>
 
         {gameScores.length ? (
           gameScores.map((score, index) => {
+            const eloChange = score.elo_change ?? 0;
+            const eloLabel = eloChange > 0 ? `+${eloChange}` : `${eloChange}`;
+
             return (
               <View key={score.user_id} style={gameScore.row}>
                 <Text style={gameScore.position}>{index + 1}.</Text>
-
                 <Text style={gameScore.username}>{score.username}</Text>
-
                 <Text style={gameScore.score}>{score.score}</Text>
+                <View style={gameScore.eloContainer}>
+                  <Text style={gameScore.prevElo}>{score.prev_elo}</Text>
+                  <Text
+                    style={[
+                      gameScore.eloChange,
+                      eloChange > 0 && gameScore.positive,
+                      eloChange < 0 && gameScore.negative,
+                    ]}
+                  >
+                    {eloLabel}
+                  </Text>
+                </View>
               </View>
             );
           })
         ) : (
-          <Text style={gameScore.noScores}>
-            This Game Has Not Been Scored Yet
-          </Text>
+          <Text style={gameScore.noScores}>No scores yet</Text>
         )}
       </View>
     </SafeAreaView>

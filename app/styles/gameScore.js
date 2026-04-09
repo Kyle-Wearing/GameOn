@@ -73,4 +73,85 @@ export const gameScore = StyleSheet.create({
     color: "#999",
     marginTop: 10,
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+
+  position: {
+    width: 30,
+    fontWeight: "bold",
+  },
+
+  username: {
+    flex: 1,
+  },
+
+  score: {
+    width: 50,
+    textAlign: "center",
+  },
+
+  eloContainer: {
+    width: 90,
+    alignItems: "flex-end",
+  },
+
+  prevElo: {
+    fontSize: 12,
+    color: "#888",
+  },
+
+  eloChange: {
+    fontWeight: "bold",
+  },
+
+  positive: {
+    color: "#22c55e",
+  },
+
+  negative: {
+    color: "#ef4444",
+  },
+  headerRow: {
+    flexDirection: "row",
+    paddingBottom: 8,
+    marginBottom: 6,
+    borderBottomWidth: 2,
+    borderBottomColor: "#ddd",
+  },
+
+  headerPosition: {
+    width: 30,
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
+  },
+
+  headerUsername: {
+    flex: 1,
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
+  },
+
+  headerScore: {
+    width: 50,
+    textAlign: "center",
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
+  },
+
+  headerElo: {
+    width: 90,
+    textAlign: "right",
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#666",
+  },
 });
