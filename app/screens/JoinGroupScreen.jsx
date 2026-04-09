@@ -3,7 +3,13 @@ import { TouchableOpacity, View } from "react-native";
 import { Modal } from "react-native";
 import { Text, SafeAreaView, TextInput, Button } from "react-native";
 import { joinGroup } from "../styles/joinGroup";
-import { checkInGroup, createGroup, getUser, joinGroupById } from "../../until";
+import {
+  checkInGroup,
+  createGroup,
+  getGroupByGroupId,
+  getUser,
+  joinGroupById,
+} from "../../until";
 import { UserContext } from "../../userContext";
 import { useNavigation } from "@react-navigation/native";
 
@@ -39,9 +45,14 @@ function JoinGroupScreen() {
 
   async function handleJoinGroup() {
     if (joinCode) {
+      const checkForGroup = await getGroupByGroupId(joinCode.toUpperCase());
+      if (!checkForGroup.length) {
+        setError("Invalid Join Code");
+        return;
+      }
       const check = await checkInGroup(user.uid, joinCode.toUpperCase());
       if (!check) {
-        joinGroupById(joinCode, user.uid)
+        joinGroupById(joinCode.toUpperCase(), user.uid)
           .then((status) => {
             if (status === 200) {
               setJoinVisible(false);
@@ -49,7 +60,7 @@ function JoinGroupScreen() {
                 screen: "Home",
               });
             } else {
-              setError("invalid join code");
+              setError("something went wrong");
             }
           })
           .catch((err) => {
@@ -121,7 +132,7 @@ function JoinGroupScreen() {
               style={joinGroup.input}
               value={joinCode}
               onChangeText={(text) => {
-                setJoinCode(text);
+                setJoinCode(text.toUpperCase());
                 setError("");
               }}
               returnKeyType="done"
