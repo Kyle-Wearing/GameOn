@@ -10,7 +10,7 @@ import {
   ScrollView,
 } from "react-native";
 import { recordScores } from "../styles/recordScores";
-import { scoreSession, setSessionScored, updateElo } from "../../until";
+import { getElo, scoreSession, setSessionScored, updateElo } from "../../until";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -25,10 +25,21 @@ export function RecordScoresScreen({ route }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const newMembers = members.map((member) => {
-      return { username: member.username, user_id: member.user_id, score: 0 };
+    // const newMembers = members.map((member) => {
+    //   return { username: member.username, user_id: member.user_id, score: 0 };
+    // });
+    // setMemberArr(newMembers);
+    getElo(id, selectedSession.game_id).then((res) => {
+      const newMembers = res.map((member) => {
+        return {
+          username: member.username,
+          user_id: member.user_id,
+          score: 0,
+          prev_elo: member.avg_elo,
+        };
+      });
+      setMemberArr(newMembers);
     });
-    setMemberArr(newMembers);
   }, []);
 
   function calculateEloChange(players) {
@@ -91,6 +102,7 @@ export function RecordScoresScreen({ route }) {
             player.score,
             player.position,
             player.eloChange,
+            player.prev_elo,
           ),
         ),
       );

@@ -347,6 +347,7 @@ export async function scoreSession(
   score,
   position,
   eloChange,
+  prev_elo,
 ) {
   return api
     .post(`session/${session_id}`, {
@@ -354,6 +355,7 @@ export async function scoreSession(
       score,
       position,
       elo_change: Number(eloChange),
+      prev_elo,
     })
     .then((res) => {
       return res.data;
