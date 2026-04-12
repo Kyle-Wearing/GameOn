@@ -159,8 +159,7 @@ function JoinGroupScreen() {
             />
             {error ? <Text style={joinGroup.errorText}>{error}</Text> : null}
             <Button title="create group" onPress={handleCreateGroup}></Button>
-            {user.uid === "gRumFtfuO5f8Y3km2cJ18WXXyp82" ||
-            "hidlztouP2gC3r6MfNTEkZM0Cka2" ? (
+            {user.uid === "gRumFtfuO5f8Y3km2cJ18WXXyp82" ? (
               <Button title="Admin Button" onPress={handleAdminCreate}></Button>
             ) : null}
             <Button title="back" onPress={handleCreateModal}></Button>
